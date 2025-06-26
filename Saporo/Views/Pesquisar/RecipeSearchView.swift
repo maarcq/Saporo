@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RecipeSearchView: View {
+    @Binding var navigationPath: NavigationPath
     
     @StateObject private var viewModel = RecipeSearchViewModel()
 
@@ -56,7 +57,7 @@ struct RecipeSearchView: View {
                 }
                 .scrollContentBackground(.hidden)
                 .navigationDestination(for: Recipe.self) { recipe in
-                    RecipeDetailView(recipeId: recipe.id)
+                    RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
                 }
             }
         }
@@ -67,5 +68,5 @@ struct RecipeSearchView: View {
 }
 
 #Preview {
-    RecipeSearchView()
+    RecipeSearchView(navigationPath: .constant(NavigationPath()))
 }
