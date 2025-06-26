@@ -125,7 +125,6 @@ struct RecipeDetailView: View {
             .padding()
             .navigationTitle(viewModel.recipe?.title ?? "Detalhes da Receita")
             .navigationBarTitleDisplayMode(.inline)
-            
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {

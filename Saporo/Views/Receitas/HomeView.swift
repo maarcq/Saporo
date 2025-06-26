@@ -24,7 +24,6 @@ struct HomeView: View {
                     }
                     .tabViewStyle(.page)
                     .frame(height: 300)
-                    
                     Text("Comidas de São João")
                         .frame(maxWidth: .infinity,alignment: .leading)
                         .foregroundStyle(Color("LabelsColor"))

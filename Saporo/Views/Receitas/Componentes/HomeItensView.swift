@@ -16,11 +16,11 @@ struct HomeItensView: View {
     
     var body: some View {
         VStack {
-            Image(image)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 200, height: 150)
-                .cornerRadius(16)
+//            Image(image)
+//                .resizable()
+//                .scaledToFill()
+//                .frame(width: 200, height: 150)
+//                .cornerRadius(16)
             
             AsyncImage(url: URL(string: image)) { image in
                 image.image?

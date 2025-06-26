@@ -6,176 +6,219 @@
 //
 
 import SwiftUI
-
 struct RecipeInstructionsView: View {
-    
     @StateObject private var viewModel: RecipeInstructionsViewModel
-    
+    @State private var scrolledID: Int? // Para controle de scroll
+
     init(analyzedInstructions: [RecipeInformation.AnalyzedInstruction]?) {
         _viewModel = StateObject(wrappedValue: RecipeInstructionsViewModel(analyzedInstructions: analyzedInstructions))
     }
-    
+
     var body: some View {
-        
         VStack(spacing: 20) {
-            
             if let errorMessage = viewModel.errorMessage {
-                
-                Text(errorMessage)
-                    .foregroundColor(.red)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                
+                errorMessageView(message: errorMessage)
             } else if viewModel.allSteps.isEmpty {
-                
-                Text("Nenhum passo de instrução disponível para esta receita.")
-                    .foregroundColor(.secondary)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                
+                emptyInstructionsView()
             } else if viewModel.showCompletionMessage {
-                
-                Spacer()
-                
-                Image(systemName: "hand.thumbsup.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .foregroundColor(.green)
-                
-                Text("Parabéns!\nReceita Finalizada!")
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .multilineTextAlignment(.center)
-                    .padding()
-                
-                Spacer()
-                
+                completionMessageView()
             } else {
-                
-                Spacer()
-                
-                HStack {
-                    VStack {
-                        ForEach(viewModel.allSteps.indices, id: \.self) { index in
-                            
-                            VStack {
-                                
-                                Text("\(index + 1)")
-                                    .scaleEffect(viewModel.currentStepIndex+1 == index+1 ? 1.4 : 1).animation(.easeInOut)
-                                    .font(.title)
-                                    .bold()
-                                    .foregroundStyle(.white)
-                                    .background {
-                                        Circle()
-                                            .fill(Color("ColorCircleInstructions"))
-                                            .frame(width: 60, height: 60)
-                                            .scaleEffect(viewModel.currentStepIndex+1 == index+1 ? 1.3 : 1).animation(.easeInOut)
-                                        if index < viewModel.allSteps.count - 1 {
-                                            Rectangle()
-                                                .fill(Color("ColorCircleInstructions"))
-                                                .frame(width: 8, height: 100)
-                                                .offset(y: 80)
-                                                .zIndex(-1)
-                                        }
-                                    }
-                            }
-                            .padding(.vertical,60)
-                            .onTapGesture {
-                                do {
-                                    viewModel.currentStepIndex = index
-                                    print(viewModel.currentStepIndex)
-                                    viewModel.updateCurrentStepTextAndButtonState()
-                                }
-                            }
-                        }
-                        
-                        Spacer()
-                    }
-                    .onReceive(NotificationCenter.default.publisher(for: .NextStep)) { _ in
-                        viewModel.goToNextStep()
-                    }
-                    .padding()
-                    .frame(maxWidth: 100, maxHeight: .infinity)
-                    
-                    VStack {
-                        Text("Passo \(viewModel.currentStepIndex + 1) de \(viewModel.allSteps.count)")
-                            .font(.headline)
-                            .foregroundColor(.secondary)
-                        
-                        Text(viewModel.currentStepText)
-                            .font(.title2)
-                            .fontWeight(.medium)
-                            .multilineTextAlignment(.center)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color(.systemGray6))
-                            .cornerRadius(15)
-                            .padding(.horizontal)
-                    }
-                }
-                
-                Spacer()
-                
-                HStack(spacing: 20) {
-                    //                    Button(action: viewModel.goToPreviousStep) {
-                    //                        Label("Anterior", systemImage: "arrow.left.circle.fill")
-                    //                            .font(.title2)
-                    //                            .padding(.vertical, 10)
-                    //                            .padding(.horizontal, 20)
-                    //                            .background(viewModel.canGoToPreviousStep ? Color.accentColor : Color.gray)
-                    //                            .foregroundColor(.white)
-                    //                            .cornerRadius(10)
-                    //                    }
-                    //                    .disabled(!viewModel.canGoToPreviousStep)
-                    //
-                    
-                    if viewModel.showFinishButton {
-                        //                        Button(action: viewModel.didTapFinishRecipe) {
-                        //                            Label("Concluir", systemImage: "checkmark.circle.fill")
-                        //                                .font(.title2)
-                        //                                .padding(.vertical, 10)
-                        //                                .padding(.horizontal, 20)
-                        //                                .background(Color.green)
-                        //                                .foregroundColor(.white)
-                        //                                .cornerRadius(10)
-                        //                        }
-                    } else {
-                        //                        Button(action: viewModel.goToNextStep) {
-                        //                            Label("Próximo", systemImage: "arrow.right.circle.fill")
-                        //                                .font(.title2)
-                        //                                .padding(.vertical, 10)
-                        //                                .padding(.horizontal, 20)
-                        //                                .background(viewModel.canGoToNextStep ? Color.accentColor : Color.gray)
-                        //                                .foregroundColor(.white)
-                        //                                .cornerRadius(10)
-                        //                        }
-                        //                        .disabled(!viewModel.canGoToNextStep)
-                        
-                    }
-                }
-                .padding(.bottom, 20)
+                mainContent
             }
         }
-        .background {
-            BackgroundGeral()
-        }
+        .background(
+            Image("TextureHome")
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+        )
+        .background(Color("Background").edgesIgnoringSafeArea(.all))
         .navigationTitle("Instruções")
         .navigationBarTitleDisplayMode(.inline)
-        // MARK: Alerta de Confirmação
         .alert("Finalizar Receita", isPresented: $viewModel.showConfirmationAlert) {
+            confirmationAlertButtons
+        } message: {
+            Text("Tem certeza que deseja finalizar a receita?")
+        }
+    }
+    
+    // MARK: - Subviews
+    
+    private var mainContent: some View {
+        VStack {
+            Spacer()
+            HStack {
+                stepCirclesView
+                instructionsScrollView
+            }
+            Spacer()
+            buttonsBar
+        }
+    }
+    
+    private var stepCirclesView: some View {
+        ScrollView {
+            VStack {
+                ForEach(viewModel.allSteps.indices, id: \.self) { index in
+                    stepCircle(index: index)
+                        .padding(.vertical, 60)
+                        .onTapGesture {
+                            handleStepTap(index: index)
+                        }
+                }
+                Spacer()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .NextStep)) { _ in
+                viewModel.goToNextStep()
+            }
+            .padding()
+            .frame(maxWidth: 100, maxHeight: .infinity)
+        }
+    }
+    
+    private func stepCircle(index: Int) -> some View {
+        VStack {
+            Text("\(index+1)")
+                .scaleEffect(viewModel.currentStepIndex == index ? 1.4 : 1)
+                .animation(.easeInOut, value: viewModel.currentStepIndex)
+                .font(.title)
+                .bold()
+                .foregroundStyle(.white)
+                .background {
+                    Circle()
+                        .fill(Color("ColorCircleInstructions"))
+                        .frame(width: 60, height: 60)
+                        .scaleEffect(viewModel.currentStepIndex == index ? 1.3 : 1)
+                        .animation(.easeInOut, value: viewModel.currentStepIndex)
+                    
+                    if index < viewModel.allSteps.count - 1 {
+                        Rectangle()
+                            .fill(Color("ColorCircleInstructions"))
+                            .frame(width: 8, height: 100)
+                            .offset(y: 80)
+                            .zIndex(-1)
+                    }
+                }
+        }
+    }
+    
+    private var instructionsScrollView: some View {
+        VStack {
+                ScrollViewReader { proxy in
+                    ScrollView(.vertical) {
+                        LazyVStack(spacing: 0) {
+                            ForEach(viewModel.allSteps, id: \.id) { step in
+                                instructionStepView(step: step)
+                                    .containerRelativeFrame(.vertical)
+                                    .id(step.id)
+                                    .scrollTransition(axis: .vertical) { content, phase in
+                                            content
+                                            .scaleEffect(x: phase.isIdentity ? 1.0 : 0.0,
+                                                         y: phase.isIdentity ? 1.0 : 0.0)
+                                    }
+                            }
+                        }
+                        .scrollTargetLayout()
+                    }
+                    .scrollPosition(id: $scrolledID)
+                    .scrollTargetBehavior(.paging)
+                    .onChange(of: scrolledID) { _, newValue in
+                        if let id = newValue,
+                           let index = viewModel.allSteps.firstIndex(where: { $0.id == id }) {
+                            viewModel.currentStepIndex = index
+                        }
+                    }
+                    .onChange(of: viewModel.currentStepIndex) { _, newIndex in
+                            scrolledID = viewModel.allSteps[newIndex].id
+                    }
+                }
+        }
+    }
+    
+    private func instructionStepView(step: RecipeInformation.InstructionStep) -> some View {
+        VStack {
+            Text(step.step)
+                .font(.title2)
+                .fontWeight(.medium)
+                .multilineTextAlignment(.center)
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color(.systemGray6))
+                .cornerRadius(15)
+                .padding(.horizontal)
+        }
+    }
+    
+    private var buttonsBar: some View {
+        HStack(spacing: 20) {
+            // Botões (mantive comentados como no original)
+        }
+        .padding(.bottom, 20)
+    }
+    
+    private func errorMessageView(message: String) -> some View {
+        Text(message)
+            .foregroundColor(.red)
+            .multilineTextAlignment(.center)
+            .padding()
+    }
+    
+    private func emptyInstructionsView() -> some View {
+        Text("Nenhum passo de instrução disponível para esta receita.")
+            .foregroundColor(.secondary)
+            .multilineTextAlignment(.center)
+            .padding()
+    }
+    
+    private func completionMessageView() -> some View {
+        VStack {
+            Spacer()
+            Image(systemName: "hand.thumbsup.fill")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 100, height: 100)
+                .foregroundColor(.green)
+            Text("Parabéns!\nReceita Finalizada!")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .multilineTextAlignment(.center)
+                .padding()
+            Spacer()
+        }
+    }
+    
+    private var backgroundContent: some View {
+        ZStack {
+            Image("TextureHome")
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+            Color("Background")
+                .edgesIgnoringSafeArea(.all)
+        }
+    }
+    
+    private var confirmationAlertButtons: some View {
+        Group {
             Button("Sim", role: .destructive) {
                 viewModel.confirmFinishRecipe()
             }
             Button("Não", role: .cancel) {
                 viewModel.cancelFinishRecipe()
             }
-        } message: {
-            Text("Tem certeza que deseja finalizar a receita?")
         }
     }
+    
+    // MARK: - Handlers
+    
+    private func handleStepTap(index: Int) {
+        withAnimation(.easeInOut(duration: 0.7)) {
+            viewModel.currentStepIndex = index
+            scrolledID = viewModel.allSteps[index].id
+        }
+        viewModel.updateCurrentStepTextAndButtonState()
+    }
 }
-
 #Preview {
     let sampleInstructions: [RecipeInformation.AnalyzedInstruction] = [
         RecipeInformation.AnalyzedInstruction(
