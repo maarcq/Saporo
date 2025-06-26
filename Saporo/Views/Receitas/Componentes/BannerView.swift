@@ -24,12 +24,12 @@ struct BannerView: View {
                     .frame(width: 500, height: 300)
                     .cornerRadius(16)
             }
-            
-            Image(imageRecipe)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .frame(width: 600, height: 300)
-                .cornerRadius(16)
+//            
+//            Image(imageRecipe)
+//                .resizable()
+//                .aspectRatio(contentMode: .fill)
+//                .frame(width: 600, height: 300)
+//                .cornerRadius(16)
             
             VStack(alignment: .leading) {
                 
