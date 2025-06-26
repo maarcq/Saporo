@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FavoritesView: View {
     
+    @Binding var navigationPath: NavigationPath
     @StateObject private var viewModel = FavoritesViewModel()
     
     let columns = [GridItem(.adaptive(minimum: 200), spacing: 16)]
@@ -51,7 +52,7 @@ struct FavoritesView: View {
                     }
                     .padding(.horizontal, 20)
                     .navigationDestination(for: Int.self) { recipeId in
-                        RecipeDetailView(recipeId: recipeId)
+                        RecipeDetailView(recipeId: recipeId, navigationPath: $navigationPath)
                     }
                 }
             }
@@ -64,7 +65,7 @@ struct FavoritesView: View {
         }
     }
 }
-
-#Preview {
-    FavoritesView()
-}
+//
+//#Preview {
+//    FavoritesView()
+//}

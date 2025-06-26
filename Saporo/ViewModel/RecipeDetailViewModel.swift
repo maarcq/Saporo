@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 class RecipeDetailViewModel: ObservableObject {
+    
     @Published var recipe: RecipeInformation?
     @Published var errorMessage: String? = nil
     @Published var isLoading: Bool = true

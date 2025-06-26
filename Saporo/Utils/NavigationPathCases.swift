@@ -10,5 +10,5 @@ import Foundation
 // MARK: NavigationPath
 enum Destination: Hashable {
     
-    case exemplo
+    case preparoReceita
 }

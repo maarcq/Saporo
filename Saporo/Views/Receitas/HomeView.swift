@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     
+    @Binding var navigationPath: NavigationPath
     @State var HViewmodel = HomeViewModel()
     
     var body: some View {
@@ -93,6 +94,6 @@ struct HomeView: View {
     }
 }
 
-#Preview {
-    HomeView()
-}
+//#Preview {
+//    HomeView()
+//}

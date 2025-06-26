@@ -9,9 +9,12 @@
 import SwiftUI
 
 struct RecipeDetailView: View {
-    @StateObject private var viewModel: RecipeDetailViewModel
     
-    init(recipeId: Int) {
+    @StateObject private var viewModel: RecipeDetailViewModel
+    @Binding var navigationPath: NavigationPath
+    
+    init(recipeId: Int, navigationPath: Binding<NavigationPath>) {
+        self._navigationPath = navigationPath
         _viewModel = StateObject(wrappedValue: RecipeDetailViewModel(recipeId: recipeId))
     }
 
@@ -81,7 +84,7 @@ struct RecipeDetailView: View {
                     }
 
                     if let analyzedInstructions = recipe.analyzedInstructions, !analyzedInstructions.isEmpty {
-                        NavigationLink(value: analyzedInstructions) {
+//                        NavigationLink(value: analyzedInstructions) {
 //                            Label("Ver Passo a Passo", systemImage: "checklist.checked")
 //                                .font(.headline)
 //                                .foregroundColor(.white)
@@ -89,21 +92,28 @@ struct RecipeDetailView: View {
 //                                .frame(maxWidth: .infinity)
 //                                .background(Color.accentColor)
 //                                .cornerRadius(10)
-                            
-                            NavigationLink(destination: RecipeInstructionsView(analyzedInstructions: analyzedInstructions)) {
-                                HStack {
-                                    Image(systemName: "checklist.checked")
-                                    Text("ir para o passo a passo")
-                                        .font(.headline)
-                                        .padding()
-                                }
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .background(Color.accentColor)
-                                .cornerRadius(10)
+                            Button {
+                                navigationPath.append(Destination.preparoReceita)
+                            } label: {
+                                Image(systemName: "checklist.checked")
+                                Text("ir para o passo a passo")
+                                    .font(.headline)
+                                    .padding()
                             }
-                        }
-                        .padding(.vertical, 5)
+//                            NavigationLink(destination: RecipeInstructionsView(analyzedInstructions: analyzedInstructions)) {
+//                                HStack {
+//                                    Image(systemName: "checklist.checked")
+//                                    Text("ir para o passo a passo")
+//                                        .font(.headline)
+//                                        .padding()
+//                                }
+//                                .foregroundColor(.white)
+//                                .frame(maxWidth: .infinity)
+//                                .background(Color.accentColor)
+//                                .cornerRadius(10)
+//                            }
+//                        }
+//                        .padding(.vertical, 5)
                     } else {
                         Text("Instruções passo a passo não disponíveis.")
                             .font(.body)
@@ -148,6 +158,6 @@ struct RecipeDetailView: View {
 
 #Preview {
     NavigationView {
-        RecipeDetailView(recipeId: 716429)
+        RecipeDetailView(recipeId: 716429, navigationPath: .constant(NavigationPath()))
     }
 }

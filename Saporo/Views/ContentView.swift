@@ -48,19 +48,19 @@ struct ContentView: View {
             TabView(selection: $selectedTab) {
                 // MARK: RECEITAS
                 Tab(Tabs.home.title, systemImage: Tabs.home.icon, value: Tabs.home) {
-                    HomeView()
+                    HomeView(navigationPath: $navigationPath)
                 }
                 .customizationID(Tabs.home.customizationID)
                 
                 // MARK: FAVORITOS
                 Tab(Tabs.favorites.title, systemImage: Tabs.favorites.icon, value: Tabs.favorites) {
-                    FavoritesView()
+                    FavoritesView(navigationPath: $navigationPath)
                 }
                 .customizationID(Tabs.favorites.customizationID)
                 
                 // MARK: PESQUISAR
                 Tab(Tabs.search.title, systemImage: Tabs.search.icon, value: Tabs.search) {
-                    RecipeSearchView()
+                    RecipeSearchView(navigationPath: $navigationPath)
                 }
                 .customizationID(Tabs.search.customizationID)
                 //.customizationBehavior(.disabled, for: .tabBar)
@@ -86,8 +86,8 @@ struct ContentView: View {
             }
             .navigationDestination(for: Destination.self) { destination in
                 switch destination {
-                case .exemplo:
-                    HomeView()
+                case .preparoReceita:
+                    HomeView(navigationPath: $navigationPath)
                 }
             }
         }
