@@ -24,6 +24,9 @@ struct HomeView: View {
                 ListSaoJoao(navigationPath: $navigationPath, HViewmodel: HViewmodel)
                     .padding(.leading)
                 
+                // MARK: LISTA COM COMIDAS DO CAFE DA MANHA
+                ListCafeDaManha(navigationPath: $navigationPath, HViewmodel: HViewmodel)
+                    .padding(.leading)
                 // MARK: LISTA COM COMIDAS SOBREMESAS
                 ListSobremesas(navigationPath: $navigationPath, HViewmodel: HViewmodel)
                     .padding(.leading)

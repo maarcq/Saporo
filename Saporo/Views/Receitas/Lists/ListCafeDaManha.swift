@@ -1,5 +1,5 @@
 //
-//  ListSaoJoao.swift
+//  ListSobremesas.swift
 //  Saporo
 //
 //  Created by Marcelle Ribeiro Queiroz on 26/06/25.
@@ -7,20 +7,19 @@
 
 import SwiftUI
 
-struct ListSaoJoao: View {
+struct ListCafeDaManha: View {
     
     @Binding var navigationPath: NavigationPath
-    
     var HViewmodel: HomeViewModel
     
     var body: some View {
         
         VStack(alignment: .leading) {
             Button {
-                navigationPath.append(Destination.verMais(recipes: HViewmodel.saoJoao.results))
+                navigationPath.append(Destination.verMais(recipes: HViewmodel.breadRecipes.results))
             } label: {
                 HStack{
-                    Text("Comidas de São João")
+                    Text("Café da Manhã")
                         .font(.poppinsMedium(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
@@ -31,7 +30,7 @@ struct ListSaoJoao: View {
             
             ScrollView(.horizontal,showsIndicators: false) {
                 HStack {
-                    ForEach(HViewmodel.saoJoao.results.prefix(5), id: \.id) { recipe in
+                    ForEach(HViewmodel.breadRecipes.results.prefix(5), id: \.id) { recipe in
                         NavigationLink(destination: RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)) {
                             VStack {
                                 HomeItensView(image: recipe.image!, nameRecipe: recipe.title, maxReadyTime: recipe.readyInMinutes!)
@@ -39,11 +38,13 @@ struct ListSaoJoao: View {
                         }
                     }
                 }
+                .padding(.trailing)
             }
         }
     }
 }
 
 #Preview {
-    ListSaoJoao(navigationPath: .constant(NavigationPath()), HViewmodel: HomeViewModel())
+    ListCafeDaManha(navigationPath: .constant(NavigationPath()), HViewmodel: HomeViewModel())
 }
+

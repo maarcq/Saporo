@@ -17,7 +17,7 @@ struct ListBanner: View {
         
         VStack(alignment: .leading) {
             TabView {
-                ForEach(HViewmodel.appleRecipes.results, id: \.id) { recipe in
+                ForEach(HViewmodel.saoJoao.results, id: \.id) { recipe in
                     
                     NavigationLink(destination: RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)) {
                         
@@ -31,6 +31,6 @@ struct ListBanner: View {
     }
 }
 
-#Preview {
-    ListBanner(navigationPath: .constant(NavigationPath()), HViewmodel: HomeViewModel())
-}
+//#Preview {
+//    ListBanner(navigationPath: .constant(NavigationPath()), HViewmodel: <#HomeViewModel#>)
+//}
