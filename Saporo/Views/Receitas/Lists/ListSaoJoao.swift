@@ -10,7 +10,8 @@ import SwiftUI
 struct ListSaoJoao: View {
     
     @Binding var navigationPath: NavigationPath
-    @State var HViewmodel = HomeViewModel()
+    
+    var HViewmodel: HomeViewModel
     
     var body: some View {
         
@@ -36,5 +37,5 @@ struct ListSaoJoao: View {
 }
 
 #Preview {
-    ListSaoJoao(navigationPath: .constant(NavigationPath()))
+    ListSaoJoao(navigationPath: .constant(NavigationPath()), HViewmodel: HomeViewModel())
 }

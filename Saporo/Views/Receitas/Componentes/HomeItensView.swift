@@ -29,7 +29,7 @@ struct HomeItensView: View {
                     .frame(width: 200, height: 180)
                     .cornerRadius(16)
             }
-            
+                        
             VStack(alignment: .leading, spacing: 8) {
                 Text(nameRecipe)
                     .font(.poppinsRegular(size: 18))

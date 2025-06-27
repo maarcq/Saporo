@@ -10,7 +10,8 @@ import SwiftUI
 struct ListBanner: View {
     
     @Binding var navigationPath: NavigationPath
-    @State var HViewmodel = HomeViewModel()
+    
+    var HViewmodel: HomeViewModel
     
     var body: some View {
         
@@ -31,5 +32,5 @@ struct ListBanner: View {
 }
 
 #Preview {
-    ListBanner(navigationPath: .constant(NavigationPath()))
+    ListBanner(navigationPath: .constant(NavigationPath()), HViewmodel: HomeViewModel())
 }

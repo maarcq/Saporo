@@ -10,7 +10,8 @@ import SwiftUI
 struct ListSobremesas: View {
     
     @Binding var navigationPath: NavigationPath
-    @State var HViewmodel = HomeViewModel()
+    
+    var HViewmodel: HomeViewModel
     
     var body: some View {
         
@@ -35,5 +36,5 @@ struct ListSobremesas: View {
 }
 
 #Preview {
-    ListSobremesas(navigationPath: .constant(NavigationPath()))
+    ListSobremesas(navigationPath: .constant(NavigationPath()), HViewmodel: HomeViewModel())
 }
