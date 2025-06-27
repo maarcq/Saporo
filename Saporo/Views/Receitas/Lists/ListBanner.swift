@@ -10,13 +10,13 @@ import SwiftUI
 struct ListBanner: View {
     
     @Binding var navigationPath: NavigationPath
-    @State var HViewmodel = HomeViewModel()
+    var HViewmodel: HomeViewModel
     
     var body: some View {
         
         VStack(alignment: .leading) {
             TabView {
-                ForEach(HViewmodel.appleRecipes.results, id: \.id) { recipe in
+                ForEach(HViewmodel.saoJoao.results, id: \.id) { recipe in
                     
                     NavigationLink(destination: RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)) {
                         
@@ -30,6 +30,6 @@ struct ListBanner: View {
     }
 }
 
-#Preview {
-    ListBanner(navigationPath: .constant(NavigationPath()))
-}
+//#Preview {
+//    ListBanner(navigationPath: .constant(NavigationPath()), HViewmodel: <#HomeViewModel#>)
+//}

@@ -57,8 +57,8 @@ struct ContentView: View {
             }
             .navigationDestination(for: Destination.self) { destination in
                 switch destination {
-                case .preparoReceita:
-                    HomeView(navigationPath: $navigationPath)
+                case .verMais(recipes: let recipes):
+                    VerMaisView(receitas: recipes, text: "Comidas de São João")
                 }
             }
         }
