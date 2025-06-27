@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ListSobremesas: View {
+struct ListCafeDaManha: View {
     
     @Binding var navigationPath: NavigationPath
     var HViewmodel: HomeViewModel
@@ -16,10 +16,10 @@ struct ListSobremesas: View {
         
         VStack(alignment: .leading) {
             Button {
-                navigationPath.append(Destination.verMais(recipes: HViewmodel.sobremesas.results))
+                navigationPath.append(Destination.verMais(recipes: HViewmodel.breadRecipes.results))
             } label: {
                 HStack{
-                    Text("Sobremesas")
+                    Text("Café da Manhã")
                         .font(.poppinsMedium(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
@@ -30,7 +30,7 @@ struct ListSobremesas: View {
             
             ScrollView(.horizontal,showsIndicators: false) {
                 HStack {
-                    ForEach(HViewmodel.sobremesas.results.prefix(5), id: \.id) { recipe in
+                    ForEach(HViewmodel.breadRecipes.results.prefix(5), id: \.id) { recipe in
                         NavigationLink(destination: RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)) {
                             VStack {
                                 HomeItensView(image: recipe.image!, nameRecipe: recipe.title, maxReadyTime: recipe.readyInMinutes!)
@@ -38,12 +38,13 @@ struct ListSobremesas: View {
                         }
                     }
                 }
+                .padding(.trailing)
             }
         }
     }
 }
 
 #Preview {
-    ListSobremesas(navigationPath: .constant(NavigationPath()), HViewmodel: HomeViewModel())
+    ListCafeDaManha(navigationPath: .constant(NavigationPath()), HViewmodel: HomeViewModel())
 }
 

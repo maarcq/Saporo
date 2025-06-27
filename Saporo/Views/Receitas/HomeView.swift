@@ -18,14 +18,17 @@ struct HomeView: View {
             
             VStack(spacing: 24) {
                 // MARK: BANNER COM 3 EXEMPLOS DE RECEITAS
-                ListBanner(navigationPath: $navigationPath)
+                ListBanner(navigationPath: $navigationPath, HViewmodel: HViewmodel)
                 
                 // MARK: LISTA COM COMIDAS DE SÃO JOÃO
-                ListSaoJoao(navigationPath: $navigationPath)
+                ListSaoJoao(navigationPath: $navigationPath, HViewmodel: HViewmodel)
                     .padding(.leading)
                 
+                // MARK: LISTA COM COMIDAS DO CAFE DA MANHA
+                ListCafeDaManha(navigationPath: $navigationPath, HViewmodel: HViewmodel)
+                    .padding(.leading)
                 // MARK: LISTA COM COMIDAS SOBREMESAS
-                ListSobremesas(navigationPath: $navigationPath)
+                ListSobremesas(navigationPath: $navigationPath, HViewmodel: HViewmodel)
                     .padding(.leading)
             }
             .task {
