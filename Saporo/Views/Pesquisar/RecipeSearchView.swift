@@ -8,10 +8,10 @@
 import SwiftUI
 
 struct RecipeSearchView: View {
-    @Binding var navigationPath: NavigationPath
     
+    @Binding var navigationPath: NavigationPath
     @StateObject private var viewModel = RecipeSearchViewModel()
-
+    
     var body: some View {
         
         VStack {

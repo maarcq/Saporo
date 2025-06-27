@@ -16,66 +16,68 @@ struct BannerView: View {
     let servings: Int
     
     var body: some View {
-        HStack {
+        HStack(spacing: 16) {
             AsyncImage(url: URL(string: imageRecipe)) { image in
                 image.image?
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 500, height: 300)
+                    .frame(height: 235)
                     .cornerRadius(16)
             }
-//            
-//            Image(imageRecipe)
-//                .resizable()
-//                .aspectRatio(contentMode: .fill)
-//                .frame(width: 600, height: 300)
-//                .cornerRadius(16)
             
-            VStack(alignment: .leading) {
+            Image(imageRecipe)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .frame(height: 235)
+                .cornerRadius(16)
+                        
+            VStack(alignment: .leading, spacing: 24) {
+                Text(nameRecipe)
+                    .font(.poppinsBold(size: 32))
+                    .lineLimit(2)
+                    .padding(.trailing)
                 
-                VStack(alignment: .leading, spacing: 20) {
-                    Text(nameRecipe)
-                        .font(.poppinsBold(size: 32))
-                        .lineLimit(2)
-                    
+                VStack(alignment: .leading, spacing: 8) {
                     HStack {
                         Image(systemName: "clock")
                         Text("\(preparationTime) min")
                     }
-                    .font(.poppinsBold(size: 20))
-                    .foregroundStyle(.white)
-                    .opacity(0.7)
                     
                     HStack {
                         Image(systemName: "fork.knife")
                         Text("\(servings) porções")
                     }
-                    .font(.poppinsBold(size: 20))
-                    .foregroundStyle(.white)
-                    .opacity(0.7)
                 }
-                
-                Spacer()
-                
-                HStack {
-                    Spacer()
-                    
-                    Image(systemName: "arrow.forward.circle")
-                        .font(.largeTitle)
-                }
+                .font(.poppinsBold(size: 20))
+                .opacity(0.8)
             }
-            .padding()
-            .frame(width: 300, height: 300)
-            .bold()
-            .foregroundStyle(Color.white)
+            .padding(24)
+            .frame(minWidth: 300, maxWidth: 400, maxHeight: 235, alignment: .topLeading)
+            .foregroundStyle(Color.background)
             .background(
                 RoundedRectangle(cornerRadius: 16)
                     .fill(Color("ColorCircleInstructions"))
             )
+            .overlay(alignment: .bottomTrailing) {
+                Button {
+                    // COLOCAR A AÇÃO DE ABRIR A SHEET
+                } label: {
+                    Text(">")
+                        .font(.poppinsBold(size: 40))
+                        .foregroundStyle(.colorCircleInstructions)
+                        .padding(8)
+                        .background {
+                            Circle().fill(Color("Background"))
+                        }
+                }
+                .padding(.trailing, 16)
+                .padding(.bottom, 2)
+            }
         }
+        .padding(.horizontal)
     }
 }
 
 #Preview {
-    BannerView(nameRecipe: "Lasanha de Frango", imageRecipe: "ImageTest",preparationTime: 30,servings: 0)
+    BannerView(nameRecipe: "Lasanha de Frango com queijo e espinafre", imageRecipe: "ImageTest",preparationTime: 30,servings: 12)
 }

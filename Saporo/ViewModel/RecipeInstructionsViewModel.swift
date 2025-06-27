@@ -5,11 +5,11 @@
 //  Created by Bernardo Santos Maranhão Maia on 17/06/25.
 //
 
-
 import Foundation
 import Combine
 
 class RecipeInstructionsViewModel: ObservableObject {
+    
     @Published var currentStepIndex: Int = 0
     @Published var currentStepText: String = ""
     @Published var errorMessage: String? = nil
@@ -36,7 +36,6 @@ class RecipeInstructionsViewModel: ObservableObject {
     }
     
     // MARK: - Lógica de Navegação dos Passos
-
     var canGoToPreviousStep: Bool {
         currentStepIndex > 0
     }
@@ -79,6 +78,6 @@ class RecipeInstructionsViewModel: ObservableObject {
     }
     
     func cancelFinishRecipe() {
-        showConfirmationAlert = false 
+        showConfirmationAlert = false
     }
 }

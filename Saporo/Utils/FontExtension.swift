@@ -10,7 +10,7 @@ import SwiftUI
 
 extension Font {
     
-    // MARK: Fonte Regular
+    // MARK: - Fonte Regular
     static func poppinsRegular(size: CGFloat) -> Font {
         let cfURL = Bundle.main.url(
             forResource: "Poppins-Regular", // Nome do ARQUIVO
@@ -28,7 +28,7 @@ extension Font {
         return Font(uiFont ?? UIFont())
     }
     
-    // MARK: Fonte Média
+    // MARK: - Fonte Média
     static func poppinsMedium(size: CGFloat) -> Font {
         let cfURL = Bundle.main.url(
             forResource: "Poppins-Medium", // Nome do ARQUIVO
@@ -46,7 +46,7 @@ extension Font {
         return Font(uiFont ?? UIFont())
     }
     
-    // MARK: Fonte Bold
+    // MARK: - Fonte Bold
     static func poppinsBold(size: CGFloat) -> Font {
         let cfURL = Bundle.main.url(
             forResource: "Poppins-Bold", // Nome do ARQUIVO

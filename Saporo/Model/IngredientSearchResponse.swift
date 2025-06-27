@@ -6,7 +6,6 @@
 //
 import Foundation
 
-
 struct IngredientSearchResponse: Decodable {
     let results: [Ingredient]
     let offset: Int
@@ -21,6 +20,7 @@ struct PantryIngredient: Identifiable, Hashable, Codable { // Added Codable for 
     var quantity: Double // The amount the user has selected
     var unit: String
 }
+
 //ainda não sei se será necessário
 
 // struct ExtendedIngredient: Decodable, Identifiable {

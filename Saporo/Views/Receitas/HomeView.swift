@@ -10,79 +10,23 @@ import SwiftUI
 struct HomeView: View {
     
     @Binding var navigationPath: NavigationPath
+    
     @State var HViewmodel = HomeViewModel()
     
     var body: some View {
-        ScrollView(.vertical) {
-            VStack {
-                VStack(spacing: 20) {
-                    TabView {
-                        ForEach(HViewmodel.appleRecipes.results, id: \.id) { recipe in
-                            NavigationLink(destination: RecipeDetailView(recipeId: recipe.id)) {
-                                BannerView(nameRecipe: recipe.title, imageRecipe: recipe.image!, preparationTime: recipe.readyInMinutes ?? 0, servings: recipe.servings ?? 0)
-                            }
-                        }
-                    }
-                    .tabViewStyle(.page)
-                    .frame(height: 300)
-                    Text("Comidas de São João")
-                        .frame(maxWidth: .infinity,alignment: .leading)
-                        .foregroundStyle(Color("LabelsColor"))
-                        .padding(.horizontal)
-                        .font(.title2)
-                    
-                    ScrollView(.horizontal,showsIndicators: false) {
-                        HStack {
-                            ForEach(HViewmodel.appleRecipes.results, id: \.id) { recipe in
-                                NavigationLink(destination: RecipeDetailView(recipeId: recipe.id)) {
-                                    VStack {
-                                        HomeItensView(image: recipe.image!, nameRecipe: recipe.title, maxReadyTime: recipe.readyInMinutes!)
-                                    }
-                                    .padding(.horizontal)
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                    
-                    Text("Sobremesas")
-                        .frame(maxWidth: .infinity,alignment: .leading)
-                        .foregroundStyle(Color("LabelsColor"))
-                        .padding(.horizontal)
-                        .font(.title2)
-                    
-                    ScrollView(.horizontal,showsIndicators: false) {
-                        HStack {
-                            ForEach(HViewmodel.eggWhitesRecipes.results, id: \.id) { recipe in
-                                NavigationLink(destination: RecipeDetailView(recipeId: recipe.id)) {
-                                    VStack {
-                                        HomeItensView(image: recipe.image!, nameRecipe: recipe.title, maxReadyTime: recipe.readyInMinutes!)
-                                    }
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                    
-                    Text("Sobremesas")
-                        .frame(maxWidth: .infinity,alignment: .leading)
-                        .foregroundStyle(Color("LabelsColor"))
-                        .padding(.horizontal)
-                        .font(.title2)
-                    
-                    ScrollView(.horizontal,showsIndicators: false) {
-                        HStack {
-                            ForEach(HViewmodel.breadRecipes.results, id: \.id) { recipe in
-                                NavigationLink(destination: RecipeDetailView(recipeId: recipe.id)) {
-                                    VStack {
-                                        HomeItensView(image: recipe.image!, nameRecipe: recipe.title, maxReadyTime: recipe.readyInMinutes!)
-                                    }
-                                }
-                            }
-                        }
-                        .padding(.horizontal)
-                    }
-                }
+        ScrollView(.vertical, showsIndicators: false) {
+            
+            VStack(spacing: 24) {
+                // MARK: BANNER COM 3 EXEMPLOS DE RECEITAS
+                ListBanner(navigationPath: $navigationPath)
+                
+                // MARK: LISTA COM COMIDAS DE SÃO JOÃO
+                ListSaoJoao(navigationPath: $navigationPath)
+                    .padding(.leading)
+                
+                // MARK: LISTA COM COMIDAS SOBREMESAS
+                ListSobremesas(navigationPath: $navigationPath)
+                    .padding(.leading)
             }
             .task {
                 await HViewmodel.fetchRecipesByIngredients()
@@ -93,7 +37,7 @@ struct HomeView: View {
         }
     }
 }
-
-//#Preview {
-//    HomeView()
-//}
+    
+#Preview {
+    HomeView(navigationPath: .constant(NavigationPath()))
+}

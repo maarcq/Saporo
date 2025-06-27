@@ -6,14 +6,16 @@
 //
 
 import SwiftUI
+
 struct RecipeInstructionsView: View {
+    
     @StateObject private var viewModel: RecipeInstructionsViewModel
     @State private var scrolledID: Int? // Para controle de scroll
-
+    
     init(analyzedInstructions: [RecipeInformation.AnalyzedInstruction]?) {
         _viewModel = StateObject(wrappedValue: RecipeInstructionsViewModel(analyzedInstructions: analyzedInstructions))
     }
-
+    
     var body: some View {
         VStack(spacing: 20) {
             if let errorMessage = viewModel.errorMessage {
@@ -26,14 +28,10 @@ struct RecipeInstructionsView: View {
                 mainContent
             }
         }
-        .background(
-            Image("TextureHome")
-                .resizable()
-                .scaledToFill()
-                .edgesIgnoringSafeArea(.all)
-        )
-        .background(Color("Background").edgesIgnoringSafeArea(.all))
-        .navigationTitle("Instruções")
+        .background {
+            BackgroundGeral()
+        }
+        .navigationTitle("Preparo")
         .navigationBarTitleDisplayMode(.inline)
         .alert("Finalizar Receita", isPresented: $viewModel.showConfirmationAlert) {
             confirmationAlertButtons
@@ -43,7 +41,6 @@ struct RecipeInstructionsView: View {
     }
     
     // MARK: - Subviews
-    
     private var mainContent: some View {
         VStack {
             Spacer()
@@ -104,34 +101,34 @@ struct RecipeInstructionsView: View {
     
     private var instructionsScrollView: some View {
         VStack {
-                ScrollViewReader { proxy in
-                    ScrollView(.vertical) {
-                        LazyVStack(spacing: 0) {
-                            ForEach(viewModel.allSteps, id: \.id) { step in
-                                instructionStepView(step: step)
-                                    .containerRelativeFrame(.vertical)
-                                    .id(step.id)
-                                    .scrollTransition(axis: .vertical) { content, phase in
-                                            content
-                                            .scaleEffect(x: phase.isIdentity ? 1.0 : 0.0,
-                                                         y: phase.isIdentity ? 1.0 : 0.0)
-                                    }
-                            }
-                        }
-                        .scrollTargetLayout()
-                    }
-                    .scrollPosition(id: $scrolledID)
-                    .scrollTargetBehavior(.paging)
-                    .onChange(of: scrolledID) { _, newValue in
-                        if let id = newValue,
-                           let index = viewModel.allSteps.firstIndex(where: { $0.id == id }) {
-                            viewModel.currentStepIndex = index
+            ScrollViewReader { proxy in
+                ScrollView(.vertical) {
+                    LazyVStack(spacing: 0) {
+                        ForEach(viewModel.allSteps, id: \.id) { step in
+                            instructionStepView(step: step)
+                                .containerRelativeFrame(.vertical)
+                                .id(step.id)
+                                .scrollTransition(axis: .vertical) { content, phase in
+                                    content
+                                        .scaleEffect(x: phase.isIdentity ? 1.0 : 0.0,
+                                                     y: phase.isIdentity ? 1.0 : 0.0)
+                                }
                         }
                     }
-                    .onChange(of: viewModel.currentStepIndex) { _, newIndex in
-                            scrolledID = viewModel.allSteps[newIndex].id
+                    .scrollTargetLayout()
+                }
+                .scrollPosition(id: $scrolledID)
+                .scrollTargetBehavior(.paging)
+                .onChange(of: scrolledID) { _, newValue in
+                    if let id = newValue,
+                       let index = viewModel.allSteps.firstIndex(where: { $0.id == id }) {
+                        viewModel.currentStepIndex = index
                     }
                 }
+                .onChange(of: viewModel.currentStepIndex) { _, newIndex in
+                    scrolledID = viewModel.allSteps[newIndex].id
+                }
+            }
         }
     }
     
@@ -210,7 +207,6 @@ struct RecipeInstructionsView: View {
     }
     
     // MARK: - Handlers
-    
     private func handleStepTap(index: Int) {
         withAnimation(.easeInOut(duration: 0.7)) {
             viewModel.currentStepIndex = index
@@ -219,6 +215,7 @@ struct RecipeInstructionsView: View {
         viewModel.updateCurrentStepTextAndButtonState()
     }
 }
+
 #Preview {
     let sampleInstructions: [RecipeInformation.AnalyzedInstruction] = [
         RecipeInformation.AnalyzedInstruction(

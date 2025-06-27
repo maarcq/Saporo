@@ -9,6 +9,7 @@ import Foundation
 import Combine
 
 class FavoritesViewModel: ObservableObject {
+    
     @Published var favoriteRecipes: [RecipeInformation] = []
     @Published var isLoading: Bool = false
     @Published var errorMessage: String? = nil
@@ -16,6 +17,7 @@ class FavoritesViewModel: ObservableObject {
     private let apiClient: SpoonacularAPIClient
     private let favoritesManager: FavoritesManager
     private var cancellables = Set<AnyCancellable>()
+    
     init(apiClient: SpoonacularAPIClient = SpoonacularAPIClient(), favoritesManager: FavoritesManager = .shared) {
         self.apiClient = apiClient
         self.favoritesManager = favoritesManager
@@ -40,7 +42,7 @@ class FavoritesViewModel: ObservableObject {
             isLoading = false
             return
         }
-
+        
         for id in ids {
             do {
                 let recipe = try await apiClient.getRecipeInformation(id: id)
@@ -54,7 +56,7 @@ class FavoritesViewModel: ObservableObject {
         favoriteRecipes = fetchedRecipes.sorted { $0.title < $1.title }
         isLoading = false
     }
-
+    
     func removeFavorite(recipeID: Int) {
         favoritesManager.removeFavorite(recipeID: recipeID)
     }

@@ -5,7 +5,6 @@
 //  Created by Bernardo Santos Maranhão Maia on 12/06/25.
 //
 
-
 import Foundation
 
 struct RecipeSearchResponse: Decodable {
@@ -39,7 +38,7 @@ struct RecipeInformation: Decodable, Identifiable {
     let readyInMinutes: Int?
     let servings: Int?
     let sourceUrl: String?
-
+    
     
     struct AnalyzedInstruction: Decodable, Identifiable, Hashable {
         let name: String?
@@ -47,16 +46,15 @@ struct RecipeInformation: Decodable, Identifiable {
         
         var id: String { name ?? UUID().uuidString }
     }
-
+    
     struct InstructionStep: Decodable, Identifiable, Hashable {
         let number: Int
         let step: String
         var id: Int { number }
     }
-
-    let analyzedInstructions: [AnalyzedInstruction]? 
+    
+    let analyzedInstructions: [AnalyzedInstruction]?
 }
-
 
 struct Ingredient: Identifiable, Decodable, Hashable {
     let id: Int

@@ -15,12 +15,12 @@ struct HomeItensView: View {
     let maxReadyTime: Int
     
     var body: some View {
-        VStack {
-//            Image(image)
-//                .resizable()
-//                .scaledToFill()
-//                .frame(width: 200, height: 150)
-//                .cornerRadius(16)
+        VStack(alignment: .leading, spacing: 8) {
+            Image(image)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 200, height: 150)
+                .cornerRadius(16)
             
             AsyncImage(url: URL(string: image)) { image in
                 image.image?
@@ -30,56 +30,26 @@ struct HomeItensView: View {
                     .cornerRadius(16)
             }
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 8) {
                 Text(nameRecipe)
-                    .padding(.top,4)
-                    .foregroundStyle(.black)
+                    .font(.poppinsRegular(size: 18))
+                    .foregroundStyle(.labels)
                     .lineLimit(2)
-                    .multilineTextAlignment(.leading)
-                    .frame(width: 200,alignment: .leading)
+                    .frame(width: 200, alignment: .leading)
                 
                 Text("\(maxReadyTime) min")
-                    .foregroundStyle(.gray)
+                    .font(.poppinsRegular(size: 18))
+                    .foregroundStyle(.labels.opacity(0.8))
             }
             .frame(width: 200,alignment: .leading)
         }
     }
 }
 
-struct BottomRoundedRectangle: Shape {
-    var radius: CGFloat = 15
-
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-
-        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY - radius))
-        path.addArc(
-            center: CGPoint(x: rect.maxX - radius, y: rect.maxY - radius),
-            radius: radius,
-            startAngle: .zero,
-            endAngle: .degrees(90),
-            clockwise: false
-        )
-        path.addLine(to: CGPoint(x: rect.minX + radius, y: rect.maxY))
-        path.addArc(
-            center: CGPoint(x: rect.minX + radius, y: rect.maxY - radius),
-            radius: radius,
-            startAngle: .degrees(90),
-            endAngle: .degrees(180),
-            clockwise: false
-        )
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY))
-
-        return path
-    }
-}
-
 #Preview {
     HomeItensView(
         image: "ImageTest",
-        nameRecipe: "Panqueca de Banana",
+        nameRecipe: "Pé de Moleque com nescau",
         maxReadyTime: 10
     )
 }
