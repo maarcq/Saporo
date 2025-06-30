@@ -44,16 +44,6 @@ class RecipeDetailViewModel: ObservableObject {
             self.recipe = fetchedRecipe
             self.isFavorite = favoritesManager.isFavorite(recipeID: recipeId)
             
-            print("Receita carregada para ID \(recipeId): \(fetchedRecipe.title)")
-            if let instructions = fetchedRecipe.analyzedInstructions {
-                print("Analyzed Instructions count: \(instructions.count)")
-                if let firstSet = instructions.first {
-                    print("First instruction set steps count: \(firstSet.steps.count)")
-                }
-            } else {
-                print("Analyzed Instructions are NIL for this recipe.")
-            }
-            
         } catch {
             errorMessage = error.localizedDescription
         }
