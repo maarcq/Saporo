@@ -23,9 +23,9 @@ class HomeViewModel {
     func fetchRecipesByIngredients() async {
         errorMenssage = nil
         do {
-            saoJoao = try await SpApiClient.getRecipeByQuery(query: "corn", number: 24)
+//            saoJoao = try await SpApiClient.getRecipeByQuery(query: "corn", number: 24)
             sobremesas = try await SpApiClient.getRecipeByQuery(query: "dessert", number: 24)
-            breadRecipes = try await SpApiClient.getRecipeByQuery(query:"bread", number: 24)
+//            breadRecipes = try await SpApiClient.getRecipeByQuery(query:"bread", number: 24)
         } catch {
             errorMenssage = error.localizedDescription
         }

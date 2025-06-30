@@ -13,7 +13,6 @@ struct ListSaoJoao: View {
     var HViewmodel: HomeViewModel
     
     var body: some View {
-        
         VStack(alignment: .leading) {
             Button {
                 navigationPath.append(Destination.verMais(recipes: HViewmodel.saoJoao.results))

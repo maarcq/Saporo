@@ -11,7 +11,7 @@ class SpoonacularAPIClient {
     //f9b66f8c2a2244649fcf4842a537d3f8 Natan
     //f0104e6af6864ac090e9ece49d34af22 Raynara
     //c206d846f25f40558f2036aa4806bc81 Bernado
-    private let apiKey: String = "f0104e6af6864ac090e9ece49d34af22"
+    private let apiKey: String = "f9b66f8c2a2244649fcf4842a537d3f8"
     private let baseURL: String = "https://api.spoonacular.com/"
     
     enum APIError: Error, LocalizedError {

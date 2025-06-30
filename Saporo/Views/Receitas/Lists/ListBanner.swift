@@ -15,21 +15,11 @@ struct ListBanner: View {
     var body: some View {
         
         VStack(alignment: .leading) {
-            TabView {
-                ForEach(HViewmodel.saoJoao.results, id: \.id) { recipe in
-                    
-                    NavigationLink(destination: RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)) {
-                        
-                        BannerView(nameRecipe: recipe.title, imageRecipe: recipe.image!, preparationTime: recipe.readyInMinutes ?? 0, servings: recipe.servings ?? 0)
-                    }
-                }
-            }
-            .tabViewStyle(.page)
-            .frame(height: 300)
+            BannerView(recipes: HViewmodel.sobremesas.results)
         }
     }
 }
 
-//#Preview {
-//    ListBanner(navigationPath: .constant(NavigationPath()), HViewmodel: <#HomeViewModel#>)
-//}
+#Preview {
+    ListBanner(navigationPath: .constant(NavigationPath()), HViewmodel: HomeViewModel())
+}
