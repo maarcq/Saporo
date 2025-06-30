@@ -9,7 +9,21 @@ import Foundation
 import Combine
 
 class RecipeInstructionsViewModel: ObservableObject {
-    
+    private let palavrasChaves: [String: String] = [
+        "whisk": "Misturar", // Ex: whisk, mix, combine -> imagem "AcaoMisturar"
+        "mix": "Misturar",
+        "combine": "Misturar",
+        "beat": "AcaoBater",      // Ex: beat -> imagem "AcaoBater"
+        "cut": "Cortar",      // Ex: cut, chop, slice, dice -> imagem "AcaoCortar"
+        "chop": "Cortar",
+        "slice": "Cortar",
+        "dice": "Cortar",
+        "knead": "Amassar",   // Ex: knead -> imagem "AcaoAmassar"
+        "bake": "Assar",      // Ex: bake, preheat -> imagem "AcaoAssar"
+        "preheat": "Assar",
+        "cook": "Cozinhar",   // Ex: cook, heat -> imagem "AcaoCozinhar"
+        "heat": "Cozinhar"
+    ]
     @Published var currentStepIndex: Int = 0
     @Published var currentStepText: String = ""
     @Published var errorMessage: String? = nil
@@ -80,4 +94,21 @@ class RecipeInstructionsViewModel: ObservableObject {
     func cancelFinishRecipe() {
         showConfirmationAlert = false
     }
+    
+    func getImageName(for stepText: String) -> String? {
+        // Converte o texto do passo para minúsculas para a busca não diferenciar maiúsculas/minúsculas
+        let lowercasedStep = stepText.lowercased()
+        
+        // Percorre o dicionário
+        for (keyword, imageName) in palavrasChaves {
+            if lowercasedStep.contains(keyword) {
+                // Se encontrar uma palavra-chave, retorna o nome da imagem imediatamente
+                return imageName
+            }
+        }
+        
+        // Se o loop terminar e não encontrar nenhuma palavra-chave, retorna nil
+        return nil
+    }
 }
+

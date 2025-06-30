@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipeInstructionsView: View {
-    
+    let misturar = "whisk"
     @StateObject private var viewModel: RecipeInstructionsViewModel
     @State private var scrolledID: Int? // Para controle de scroll
     
@@ -140,9 +140,15 @@ struct RecipeInstructionsView: View {
                 .multilineTextAlignment(.center)
                 .padding()
                 .frame(maxWidth: .infinity)
-                .background(Color(.systemGray6))
                 .cornerRadius(15)
-                .padding(.horizontal)
+                .padding(.top,100)
+            if let image = viewModel.getImageName(for: step.step) {
+                Image(image)
+                    .resizable()
+                    .scaledToFit()
+            } else {
+                EmptyView()
+            }
         }
     }
     
@@ -221,7 +227,7 @@ struct RecipeInstructionsView: View {
         RecipeInformation.AnalyzedInstruction(
             name: nil,
             steps: [
-                RecipeInformation.InstructionStep(number: 1, step: "Cozinhe a massa conforme as instruções da embalagem até ficar al dente."),
+                RecipeInformation.InstructionStep(number: 1, step: "Cozinhe e whisk a massa conforme as instruções da embalagem até ficar al dente."),
                 RecipeInformation.InstructionStep(number: 2, step: "Enquanto a massa cozinha, aqueça o azeite em uma frigideira grande em fogo médio-alto."),
                 RecipeInformation.InstructionStep(number: 3, step: "Adicione o alho picado e cozinhe por 1 minuto até ficar perfumado, tomando cuidado para não queimar."),
                 RecipeInformation.InstructionStep(number: 4, step: "Escorra a massa e adicione-a à frigideira com o molho. Misture bem para cobrir a massa. Sirva imediatamente.")
