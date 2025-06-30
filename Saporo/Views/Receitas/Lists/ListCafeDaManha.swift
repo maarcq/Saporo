@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct ListCafeDaManha: View {
-    
+
     @Binding var navigationPath: NavigationPath
+    @State private var showingSheet: Bool = false
+    @State private var selectedRecipe: Recipe?
     var HViewmodel: HomeViewModel
-    
+
     var body: some View {
-        
+
         VStack(alignment: .leading) {
             Button {
                 navigationPath.append(Destination.verMais(recipes: HViewmodel.breadRecipes.results))
@@ -27,11 +29,14 @@ struct ListCafeDaManha: View {
                         .padding(.horizontal, 8)
                 }
             }
-            
+
             ScrollView(.horizontal,showsIndicators: false) {
                 HStack {
                     ForEach(HViewmodel.breadRecipes.results.prefix(5), id: \.id) { recipe in
-                        NavigationLink(destination: RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)) {
+                        Button {
+                            self.selectedRecipe = recipe
+                            self.showingSheet = true
+                        } label: {
                             VStack {
                                 HomeItensView(image: recipe.image!, nameRecipe: recipe.title, maxReadyTime: recipe.readyInMinutes!)
                             }
@@ -41,10 +46,14 @@ struct ListCafeDaManha: View {
                 .padding(.trailing)
             }
         }
+        .sheet(isPresented: $showingSheet) {
+            if let selectedRecipe = selectedRecipe {
+                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath) // MODIFICADO AQUI
+            }
+        }
     }
 }
 
 #Preview {
     ListCafeDaManha(navigationPath: .constant(NavigationPath()), HViewmodel: HomeViewModel())
 }
-

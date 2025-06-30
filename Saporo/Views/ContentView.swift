@@ -61,6 +61,9 @@ struct ContentView: View {
                     VerMaisView(receitas: recipes, text: "Comidas de São João")
                 }
             }
+            .navigationDestination(for: [RecipeInformation.AnalyzedInstruction].self) { instructions in
+                RecipeInstructionsView(analyzedInstructions: instructions)
+            }
         }
     }
 }

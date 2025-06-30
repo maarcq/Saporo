@@ -11,7 +11,7 @@ class SpoonacularAPIClient {
     //f9b66f8c2a2244649fcf4842a537d3f8 Natan
     //f0104e6af6864ac090e9ece49d34af22 Raynara
     //c206d846f25f40558f2036aa4806bc81 Bernado
-    private let apiKey: String = "d598159740b646b9bafb47897e911e4c"
+    private let apiKey: String = "c206d846f25f40558f2036aa4806bc81"
     private let baseURL: String = "https://api.spoonacular.com/"
     
     enum APIError: Error, LocalizedError {
@@ -163,7 +163,7 @@ class SpoonacularAPIClient {
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
-            try check(data: data, response: response) // Supondo que você tenha uma função check
+            try check(data: data, response: response)
             let recipeByIngredients = try JSONDecoder().decode([RecipeByIngredients].self, from: data)
             return recipeByIngredients
         } catch {
@@ -190,7 +190,7 @@ class SpoonacularAPIClient {
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
-            try check(data: data, response: response) // Supondo que você tenha uma função check
+            try check(data: data, response: response) 
             let recipeByQuery = try JSONDecoder().decode(RecipeSearchResponse.self, from: data)
             return recipeByQuery
         } catch {
