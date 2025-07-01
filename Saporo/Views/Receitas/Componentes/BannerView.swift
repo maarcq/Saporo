@@ -9,19 +9,35 @@ import Foundation
 import SwiftUI
 
 struct BannerView: View {
+    @State private var showingSheet: Bool = false
+    @State private var selectedRecipeId: Int?
+    @Binding var navigationPath: NavigationPath
     let recipes: [Recipe]
     @State private var currentIndex: Int = 0
+    
+    private var recipeinfo: Recipe? {
+        guard recipes.indices.contains(currentIndex) else { return nil }
+        return recipes[currentIndex]
+    }
+    
     var body: some View {
-        HStack(spacing: 16) {
-            TabView (selection: $currentIndex) {
-                ForEach(Array(recipes.enumerated().prefix(5)), id: \.1.id) { index, recipe in
+        
+        Button{
+            if let recipeinfo {
+                self.selectedRecipeId = recipeinfo.id
+                self.showingSheet = true
+            }
+        } label: {
+            HStack(spacing: 16) {
+                TabView (selection: $currentIndex) {
+                    ForEach(Array(recipes.enumerated().prefix(5)), id: \.1.id) { index, recipe in
                         if let imageName = recipe.image {
-//                            Image(imageName)
-//                                .resizable()
-//                                .aspectRatio(contentMode: .fill)
-//                                .frame(width: 400, height: 235)
-//                                .cornerRadius(16)
-//                                .tag(index)
+                            //                            Image(imageName)
+                            //                                .resizable()
+                            //                                .aspectRatio(contentMode: .fill)
+                            //                                .frame(width: 400, height: 235)
+                            //                                .cornerRadius(16)
+                            //                                .tag(index)
                             AsyncImage(url: URL(string: imageName)) { image in
                                 image.image?
                                     .resizable()
@@ -33,42 +49,39 @@ struct BannerView: View {
                             .tag(index)
                         }
                     }
-            }
-            .tabViewStyle(.page(indexDisplayMode: .never))
-            .frame(height: 250)
-            if recipes.indices.contains(currentIndex) {
-            let recipe = recipes[currentIndex]
-                VStack(alignment: .leading, spacing: 24) {
-                    Text(recipe.title)
-                        .font(.poppinsBold(size: 32))
-                        .lineLimit(2)
-                        .padding(.trailing)
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack {
-                            Image(systemName: "clock")
-                            Text("\(recipe.readyInMinutes ?? 0) min")
-                        }
-                        
-                        HStack {
-                            Image(systemName: "fork.knife")
-                            Text("\(recipe.servings ?? 0) porções")
-                        }
-                    }
-                    .font(.poppinsBold(size: 20))
-                    .opacity(0.8)
                 }
-                .padding(24)
-                .frame(minWidth: 300, maxWidth: 400, maxHeight: 235, alignment: .topLeading)
-                .foregroundStyle(Color.background)
-                .background(
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color("ColorCircleInstructions"))
-                )
-                .overlay(alignment: .bottomTrailing) {
-                    Button {
-                        // COLOCAR A AÇÃO DE ABRIR A SHEET
-                    } label: {
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .frame(height: 250)
+                if recipes.indices.contains(currentIndex) {
+                    let recipe = recipes[currentIndex]
+                    VStack(alignment: .leading, spacing: 24) {
+                        Text(recipe.title)
+                            .font(.poppinsBold(size: 32))
+                            .lineLimit(2)
+                            .padding(.trailing)
+                        
+                        VStack(alignment: .leading, spacing: 8) {
+                            HStack {
+                                Image(systemName: "clock")
+                                Text("\(recipe.readyInMinutes ?? 0) min")
+                            }
+                            
+                            HStack {
+                                Image(systemName: "fork.knife")
+                                Text("\(recipe.servings ?? 0) porções")
+                            }
+                        }
+                        .font(.poppinsBold(size: 20))
+                        .opacity(0.8)
+                    }
+                    .padding(24)
+                    .frame(minWidth: 300, maxWidth: 400, maxHeight: 235, alignment: .topLeading)
+                    .foregroundStyle(Color.background)
+                    .background(
+                        RoundedRectangle(cornerRadius: 16)
+                            .fill(Color("ColorCircleInstructions"))
+                    )
+                    .overlay(alignment: .bottomTrailing) {
                         Text(">")
                             .font(.poppinsBold(size: 40))
                             .foregroundStyle(.colorCircleInstructions)
@@ -76,20 +89,23 @@ struct BannerView: View {
                             .background {
                                 Circle().fill(Color("Background"))
                             }
+                            .padding(.trailing, 16)
+                            .padding(.bottom, 2)
                     }
-                    .padding(.trailing, 16)
-                    .padding(.bottom, 2)
+                    .padding(.trailing)
                 }
-            } else {
-                Text("Carregando")
-                    .padding()
+            }
+        }
+        .sheet(isPresented: $showingSheet) {
+            if let id = selectedRecipeId {
+                RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath)
             }
         }
     }
 }
 
 #Preview {
-    BannerView(recipes: [
+    BannerView(navigationPath:.constant(NavigationPath()) , recipes: [
         Recipe(
             id: 1,
             title: "Lasanha Bolonhesa",
