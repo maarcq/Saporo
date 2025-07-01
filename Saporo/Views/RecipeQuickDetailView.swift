@@ -65,7 +65,8 @@ struct RecipeQuickDetailView: View {
 
                                 VStack(alignment: .leading, spacing: 10) {
                                     Text(recipe.title)
-                                        .font(.poppinsBold(size: 32))
+                                        .foregroundColor(Color("ColorCircleInstructions"))
+                                        .font(.poppinsMedium(size: 32)) // Ajustado para PoppinsMedium como no mockup
                                         .lineLimit(2)
                                         .minimumScaleFactor(0.7)
                                         .padding(.bottom, 5)
@@ -73,13 +74,17 @@ struct RecipeQuickDetailView: View {
                                     HStack(spacing: 20) {
                                         if let readyInMinutes = recipe.readyInMinutes {
                                             HStack {
-                                                Image(systemName: "hourglass")
+                                                Image("tempoIcon") // MODIFICADO: Usando "tempoIcon"
+                                                    .resizable()
+                                                    .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
                                                 Text("\(readyInMinutes) min")
                                             }
                                         }
                                         HStack {
-                                            Image(systemName: "globe")
-                                            Text("Italiana")
+                                            Image("paisIcon") // MODIFICADO: Usando "paisIcon"
+                                                .resizable()
+                                                .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
+                                            Text("Italiana") // Exemplo, substituir com dado real
                                         }
                                     }
                                     .font(.poppinsMedium(size: 18))
@@ -87,31 +92,45 @@ struct RecipeQuickDetailView: View {
                                     HStack(spacing: 20) {
                                         if let servings = recipe.servings {
                                             HStack {
-                                                Image(systemName: "person.2")
+                                                Image("porcaoIcon") // MODIFICADO: Usando "porcaoIcon"
+                                                    .resizable()
+                                                    .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
                                                 Text("\(servings) porções")
                                             }
                                         }
                                         HStack {
-                                            Image(systemName: "flame")
-                                            Text("300 calorias")
+                                            Image("caloriasIcon") // MODIFICADO: Usando "caloriasIcon"
+                                                .resizable()
+                                                .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
+                                            Text("300 calorias") // Exemplo, substituir com dado real
                                         }
                                     }
                                     .font(.poppinsMedium(size: 18))
                                 }
+                                .foregroundColor(Color("LabelsColor"))
                                 .padding(.top, 10)
                             }
                             .padding(.horizontal)
 
                             Text("Ingredientes")
+                                .foregroundColor(Color("ColorCircleInstructions"))
                                 .font(.poppinsBold(size: 28))
                                 .padding(.horizontal)
                                 .padding(.top, 10)
-
+                            
                             VStack(alignment: .leading, spacing: 8) {
                                 if let ingredients = recipe.extendedIngredients, !ingredients.isEmpty {
                                     ForEach(ingredients, id: \.uuid) { ingredient in
-                                        Text("\(ingredient.name.capitalized) \(String(format: "%.0f", ingredient.amount)) \(ingredient.unit)")
-                                            .font(.poppinsRegular(size: 20))
+                                        HStack {
+                                            Text(ingredient.name.capitalized)
+                                                .foregroundColor(Color("LabelsColor"))
+                                                .font(.poppinsMedium(size: 20))
+                                                .frame(maxWidth: .infinity, alignment: .leading)
+                                            
+                                            Text("\(String(format: "%.0f", ingredient.amount)) \(ingredient.unit)")
+                                                .font(.poppinsRegular(size: 20))
+                                                .foregroundColor(Color("LabelsColor").opacity(0.7))
+                                        }
                                     }
                                 } else {
                                     Text("Nenhum ingrediente listado.")
@@ -123,7 +142,7 @@ struct RecipeQuickDetailView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .background(
                                 RoundedRectangle(cornerRadius: 15)
-                                    .fill(Color(.systemGray6))
+                                    .fill(Color("RectangleLabelColor").opacity(0.2))
                             )
                             .padding(.horizontal)
                             .padding(.top, 5)
@@ -132,25 +151,30 @@ struct RecipeQuickDetailView: View {
                         }
                     }
                     
-                    Button {
-                        if let analyzedInstructions = recipe.analyzedInstructions, !analyzedInstructions.isEmpty {
-                            dismiss()
-                            navigationPath.append(analyzedInstructions)
-                        } else {
-                            viewModel.errorMessage = "Instruções não disponíveis para esta receita."
+                    HStack {
+                        Spacer()
+                        Button {
+                            if let analyzedInstructions = recipe.analyzedInstructions, !analyzedInstructions.isEmpty {
+                                dismiss()
+                                navigationPath.append(analyzedInstructions)
+                            } else {
+                                viewModel.errorMessage = "Instruções não disponíveis para esta receita."
+                            }
+                        } label: {
+                            Text("Preparar")
+                                .font(.poppinsBold(size: 24))
+                                .foregroundStyle(.white)
+                                .padding(.vertical, 15)
+                                .padding(.horizontal, 40)
+                                .background(Color("ColorCircleInstructions"))
+                                .cornerRadius(15)
                         }
-                    } label: {
-                        Text("Preparar")
-                            .font(.poppinsBold(size: 24))
-                            .foregroundStyle(.white)
-                            .frame(maxWidth: .infinity)
-                            .padding(.vertical, 15)
-                            .background(Color("ColorCircleInstructions"))
-                            .cornerRadius(15)
-                            .padding(.horizontal)
-                            .padding(.bottom, 20)
+                        .disabled(recipe.analyzedInstructions?.isEmpty ?? true)
+                        Spacer()
                     }
-                    .disabled(recipe.analyzedInstructions?.isEmpty ?? true)
+                    .padding(.horizontal)
+                    .padding(.bottom, 20)
+                    
                 } else {
                     Text("Receita não encontrada ou erro de carregamento.")
                 }
@@ -166,7 +190,8 @@ struct RecipeQuickDetailView: View {
                             Image(systemName: "chevron.left")
                             Text("Voltar")
                         }
-                        .foregroundStyle(Color("LabelsColor"))
+                        .font(.poppinsMedium(size: 18))
+                        .foregroundStyle(Color("ColorCircleInstructions"))
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -174,7 +199,7 @@ struct RecipeQuickDetailView: View {
                         viewModel.toggleFavorite()
                     } label: {
                         Image(systemName: viewModel.isFavorite ? "star.fill" : "star")
-                            .foregroundColor(viewModel.isFavorite ? .yellow : Color("LabelsColor"))
+                            .foregroundColor(viewModel.isFavorite ? Color("ColorCircleInstructions") : Color("LabelsColor"))
                     }
                 }
             }
