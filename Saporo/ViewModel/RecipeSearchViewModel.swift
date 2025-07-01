@@ -5,6 +5,7 @@
 //  Created by Bernardo Santos Maranhão Maia on 12/06/25.
 //
 
+
 import Foundation
 import Combine
 
@@ -42,6 +43,9 @@ class RecipeSearchViewModel: ObservableObject {
         CulinaryCategory(name: "African", imageName: "africana"),
         CulinaryCategory(name: "Caribbean", imageName: "caribenha")
     ]
+    
+    // NOVO: Propriedade para controlar o foco do campo de texto
+    @Published var shouldFocusSearchField: Bool = false
     
     private let apiClient: SpoonacularAPIClient
     

@@ -14,8 +14,12 @@ struct RecipeSearchView: View {
     //@StateObject private var viewModelFavorite = FavoritesViewModel()
     let columns = [GridItem(.adaptive(minimum: 200), spacing: 16)]
     
+    // New state variables for sheet presentation
     @State private var showingSheet: Bool = false
-    @State private var selectedRecipeId: Int?
+    @State private var selectedRecipeId: Int? // To store the ID of the recipe selected for the sheet
+    
+    // NOVO: Adicionado para controlar o foco do TextField
+    @FocusState private var isSearchFieldFocused: Bool
 
     var body: some View {
 
@@ -109,8 +113,14 @@ struct RecipeSearchView: View {
         }
         .sheet(isPresented: $showingSheet) {
             if let id = selectedRecipeId {
-                RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath) 
+                RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath)
             }
+        }
+
+        
+       
+        .onReceive(NotificationCenter.default.publisher(for: .SearchByVoice)) { _ in
+            isSearchFieldFocused = true
         }
     }
 }
