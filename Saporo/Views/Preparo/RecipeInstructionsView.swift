@@ -25,11 +25,6 @@ struct RecipeInstructionsView: View {
         }
         .navigationTitle("Preparo")
         .navigationBarTitleDisplayMode(.inline)
-        .alert("Finalizar Receita", isPresented: $viewModel.showConfirmationAlert) {
-            confirmationAlertButtons
-        } message: {
-            Text("Tem certeza que deseja finalizar a receita?")
-        }
         // NOVO: Adicionado para o atalho de voltar passo
         .onReceive(NotificationCenter.default.publisher(for: .PreviousStep)) { _ in
             viewModel.goToPreviousStep()
