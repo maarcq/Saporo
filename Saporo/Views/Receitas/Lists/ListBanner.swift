@@ -13,20 +13,29 @@ struct ListBanner: View {
     
     var HViewmodel: HomeViewModel
     
+    @State private var showingSheet: Bool = false
+    @State private var selectedRecipeId: Int?
+    
     var body: some View {
         
         VStack(alignment: .leading) {
             TabView {
                 ForEach(HViewmodel.saoJoao.results, id: \.id) { recipe in
-                    
-                    NavigationLink(destination: RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)) {
-                        
+                    Button {
+                        self.selectedRecipeId = recipe.id
+                        self.showingSheet = true
+                    } label: {
                         BannerView(nameRecipe: recipe.title, imageRecipe: recipe.image!, preparationTime: recipe.readyInMinutes ?? 0, servings: recipe.servings ?? 0)
                     }
                 }
             }
             .tabViewStyle(.page)
             .frame(height: 300)
+        }
+        .sheet(isPresented: $showingSheet) {
+            if let id = selectedRecipeId {
+                RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath) // APRESENTA A NOVA SHEET
+            }
         }
     }
 }

@@ -212,7 +212,7 @@ class SpoonacularAPIClient {
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
-            try check(data: data, response: response) // Supondo que você tenha uma função check
+            try check(data: data, response: response)
             let recipeByIngredients = try JSONDecoder().decode([RecipeByIngredients].self, from: data)
             return recipeByIngredients
         } catch {
@@ -239,7 +239,7 @@ class SpoonacularAPIClient {
         
         do {
             let (data, response) = try await URLSession.shared.data(from: url)
-            try check(data: data, response: response) // Supondo que você tenha uma função check
+            try check(data: data, response: response) 
             let recipeByQuery = try JSONDecoder().decode(RecipeSearchResponse.self, from: data)
             return recipeByQuery
         } catch {

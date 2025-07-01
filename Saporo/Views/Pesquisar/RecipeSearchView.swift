@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct RecipeSearchView: View {
-    
+
     @Binding var navigationPath: NavigationPath
     @StateObject private var viewModel = RecipeSearchViewModel()
     //@StateObject private var viewModelFavorite = FavoritesViewModel()
     let columns = [GridItem(.adaptive(minimum: 200), spacing: 16)]
     
+    @State private var showingSheet: Bool = false
+    @State private var selectedRecipeId: Int?
+
     var body: some View {
-        
+
         VStack {
             HStack{
                 TextField("Pesquise uma receita", text: $viewModel.searchText)
@@ -68,14 +71,16 @@ struct RecipeSearchView: View {
                 .padding(.top, 30)
             }
             
+
             if viewModel.isLoading {
                 ProgressView("Buscando receitas...")
-                
+
             } else if let errorMessage = viewModel.errorMessage {
-                
+
                 Text("Erro: \(errorMessage)")
                     .foregroundColor(.red)
                     .padding()
+
             } else {
                 NavigationStack {
                     ScrollView(.vertical) {
@@ -96,10 +101,16 @@ struct RecipeSearchView: View {
                         RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
                     }
                 }
+
             }
         }
         .background {
             BackgroundGeral()
+        }
+        .sheet(isPresented: $showingSheet) {
+            if let id = selectedRecipeId {
+                RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath) 
+            }
         }
     }
 }
