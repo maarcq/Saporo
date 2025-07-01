@@ -66,21 +66,24 @@ struct RecipeQuickDetailView: View {
                                 VStack(alignment: .leading, spacing: 10) {
                                     Text(recipe.title)
                                         .foregroundColor(Color("ColorCircleInstructions"))
-                                        .font(.poppinsMedium(size: 32))
+                                        .font(.poppinsMedium(size: 32)) // Ajustado para PoppinsMedium como no mockup
                                         .lineLimit(2)
                                         .minimumScaleFactor(0.7)
                                         .padding(.bottom, 5)
-                                    
 
                                     HStack(spacing: 20) {
                                         if let readyInMinutes = recipe.readyInMinutes {
                                             HStack {
-                                                Image(systemName: "hourglass")
+                                                Image("tempoIcon") // MODIFICADO: Usando "tempoIcon"
+                                                    .resizable()
+                                                    .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
                                                 Text("\(readyInMinutes) min")
                                             }
                                         }
                                         HStack {
-                                            Image(systemName: "globe")
+                                            Image("paisIcon") // MODIFICADO: Usando "paisIcon"
+                                                .resizable()
+                                                .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
                                             Text("Italiana") // Exemplo, substituir com dado real
                                         }
                                     }
@@ -89,25 +92,29 @@ struct RecipeQuickDetailView: View {
                                     HStack(spacing: 20) {
                                         if let servings = recipe.servings {
                                             HStack {
-                                                Image(systemName: "person.2")
+                                                Image("porcaoIcon") // MODIFICADO: Usando "porcaoIcon"
+                                                    .resizable()
+                                                    .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
                                                 Text("\(servings) porções")
                                             }
                                         }
                                         HStack {
-                                            Image(systemName: "flame")
+                                            Image("caloriasIcon") // MODIFICADO: Usando "caloriasIcon"
+                                                .resizable()
+                                                .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
                                             Text("300 calorias") // Exemplo, substituir com dado real
                                         }
                                     }
                                     .font(.poppinsMedium(size: 18))
                                 }
-                                .foregroundColor(Color("LabelsColor")) // Mantido LabelsColor para o texto de duração, porções, etc.
+                                .foregroundColor(Color("LabelsColor"))
                                 .padding(.top, 10)
                             }
                             .padding(.horizontal)
 
                             Text("Ingredientes")
                                 .foregroundColor(Color("ColorCircleInstructions"))
-                                .font(.poppinsMedium(size: 28))
+                                .font(.poppinsBold(size: 28))
                                 .padding(.horizontal)
                                 .padding(.top, 10)
                             
@@ -117,12 +124,12 @@ struct RecipeQuickDetailView: View {
                                         HStack {
                                             Text(ingredient.name.capitalized)
                                                 .foregroundColor(Color("LabelsColor"))
-                                                .font(.poppinsMedium(size: 20)) // Use Poppins-Medium para o nome do ingrediente
+                                                .font(.poppinsMedium(size: 20))
                                                 .frame(maxWidth: .infinity, alignment: .leading)
                                             
                                             Text("\(String(format: "%.0f", ingredient.amount)) \(ingredient.unit)")
                                                 .font(.poppinsRegular(size: 20))
-                                                .foregroundColor(Color("LabelsColor").opacity(0.7)) // Mantido LabelsColor para a quantidade com opacidade
+                                                .foregroundColor(Color("LabelsColor").opacity(0.7))
                                         }
                                     }
                                 } else {
@@ -183,8 +190,8 @@ struct RecipeQuickDetailView: View {
                             Image(systemName: "chevron.left")
                             Text("Voltar")
                         }
-                        .font(.poppinsMedium(size: 18)) // MODIFICADO: Fonte Poppins-Medium
-                        .foregroundStyle(Color("ColorCircleInstructions")) // MODIFICADO: Cor ColorCircleInstructions
+                        .font(.poppinsMedium(size: 18))
+                        .foregroundStyle(Color("ColorCircleInstructions"))
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
@@ -192,7 +199,7 @@ struct RecipeQuickDetailView: View {
                         viewModel.toggleFavorite()
                     } label: {
                         Image(systemName: viewModel.isFavorite ? "star.fill" : "star")
-                            .foregroundColor(viewModel.isFavorite ? Color("ColorCircleInstructions") : Color("LabelsColor")) // MODIFICADO: Estrela preenchida com ColorCircleInstructions
+                            .foregroundColor(viewModel.isFavorite ? Color("ColorCircleInstructions") : Color("LabelsColor"))
                     }
                 }
             }

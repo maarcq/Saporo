@@ -77,12 +77,11 @@ struct RecipeSearchView: View {
                 RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath)
             }
         }
-        // NOVO: Adicionado para reagir à notificação de pesquisa por voz
+
+        
+       
         .onReceive(NotificationCenter.default.publisher(for: .SearchByVoice)) { _ in
-            isSearchFieldFocused = true // Foca o campo de texto
-            // Note: Ativar o ditado automaticamente é complexo e depende de APIs privadas
-            // ou do comportamento padrão do iOS ao focar um TextField.
-            // O usuário ainda precisaria tocar no ícone do microfone no teclado.
+            isSearchFieldFocused = true
         }
     }
 }
