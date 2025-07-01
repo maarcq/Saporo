@@ -15,7 +15,6 @@ struct HomeView: View {
     
     var body: some View {
         ScrollView(.vertical, showsIndicators: false) {
-            
             VStack(spacing: 24) {
                 // MARK: BANNER COM 3 EXEMPLOS DE RECEITAS
                 ListBanner(navigationPath: $navigationPath, HViewmodel: HViewmodel)

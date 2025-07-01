@@ -112,7 +112,8 @@ struct BannerView: View {
             image: "ImageTest",
             imageType: "jpg",
             readyInMinutes: 45,
-            servings: 4
+            servings: 4,
+            cuisine: ""
         ),
         Recipe(
             id: 2,
@@ -120,7 +121,8 @@ struct BannerView: View {
             image: "ImageTest",
             imageType: "jpg",
             readyInMinutes: 15,
-            servings: 2
+            servings: 2,
+            cuisine: ""
         )
     ])
 }

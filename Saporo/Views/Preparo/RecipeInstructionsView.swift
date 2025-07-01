@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct RecipeInstructionsView: View {
-    let misturar = "whisk"
     @StateObject private var viewModel: RecipeInstructionsViewModel
     @State private var scrolledID: Int?
     
@@ -43,7 +42,7 @@ struct RecipeInstructionsView: View {
                 ForEach(viewModel.allSteps.indices, id: \.self) { index in
                     //criacao do circulo e da linha
                     stepCircle(index: index)
-                        .padding(.vertical, 60)
+                        .padding(.vertical, 30)
                         .onTapGesture {
                             //logica para clica no circulo e mover para o passo
                             handleStepTap(index: index)
@@ -57,6 +56,7 @@ struct RecipeInstructionsView: View {
             }
             .padding()
             .frame(maxWidth: 100, maxHeight: .infinity)
+            .scrollIndicators(.hidden)
         }
     }
     
@@ -81,8 +81,8 @@ struct RecipeInstructionsView: View {
                         //linha entre os circulos
                         Rectangle()
                             .fill(Color("ColorCircleInstructions"))
-                            .frame(width: 8, height: 100)
-                            .offset(y: 80)
+                            .frame(width: 8, height: 50)
+                            .offset(y: 50)
                             .zIndex(-1)
                     }
                 }
@@ -112,10 +112,13 @@ struct RecipeInstructionsView: View {
                                         .scaleEffect(x: phase.isIdentity ? 1.0 : 0.0,
                                                      y: phase.isIdentity ? 1.0 : 0.0)
                                 }
+                                .border(.black)
                         }
                     }
                     .scrollTargetLayout()
                 }
+                .ignoresSafeArea()
+                .padding(.bottom,0.2)
                 //logica q controla qual o passo atual
                 .scrollPosition(id: $scrolledID)
                 .scrollTargetBehavior(.paging)
@@ -137,22 +140,19 @@ struct RecipeInstructionsView: View {
     private func instructionStepView(step: RecipeInformation.InstructionStep) -> some View {
         VStack {
             //texto do passo a passo
-            Text(step.step)
+            let formattedText = step.step.replacingOccurrences(of: "\\.(\\s|$)", with: ".\n", options: .regularExpression)
+            
+            Text(formattedText)
                 .font(.poppinsRegular(size: 32))
-                .fontWeight(.medium)
                 .multilineTextAlignment(.leading)
-                .padding()
                 .frame(maxWidth: .infinity)
-                .cornerRadius(15)
                 .padding(.horizontal)
             //funcao para alinhas a imagem correta pro passo correto
             if let image = viewModel.getImageName(for: step.step) {
                 Image(image)
                     .resizable()
                     .scaledToFit()
-                    .scaleEffect(0.6)
-            } else {
-                EmptyView()
+                    .frame(width: 300,height: 300)
             }
         }
     }
