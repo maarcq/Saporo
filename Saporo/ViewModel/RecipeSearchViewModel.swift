@@ -5,6 +5,7 @@
 //  Created by Bernardo Santos Maranhão Maia on 12/06/25.
 //
 
+
 import Foundation
 import Combine
 
@@ -14,6 +15,9 @@ class RecipeSearchViewModel: ObservableObject {
     @Published var recipes: [Recipe] = []
     @Published var errorMessage: String? = nil
     @Published var isLoading: Bool = false
+    
+    // NOVO: Propriedade para controlar o foco do campo de texto
+    @Published var shouldFocusSearchField: Bool = false
     
     private let apiClient: SpoonacularAPIClient
     
