@@ -58,7 +58,7 @@ struct ContentView: View {
             .navigationDestination(for: Destination.self) { destination in
                 switch destination {
                 case .verMais(recipes: let recipes):
-                    VerMaisView(receitas: recipes, text: "Comidas de São João")
+                    VerMaisView(text: "Comidas de São João", receitas: recipes)
                 }
             }
             .navigationDestination(for: [RecipeInformation.AnalyzedInstruction].self) { instructions in

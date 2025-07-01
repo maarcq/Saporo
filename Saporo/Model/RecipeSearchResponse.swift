@@ -12,6 +12,7 @@ struct RecipeSearchResponse: Decodable {
     let offset: Int
     let number: Int
     let totalResults: Int
+    
 }
 
 struct Recipe: Identifiable, Decodable, Hashable {
@@ -21,6 +22,7 @@ struct Recipe: Identifiable, Decodable, Hashable {
     let imageType: String?
     let readyInMinutes: Int?
     let servings: Int?
+    let cuisine: String?
 }
 
 struct RecipeByIngredients: Decodable, Identifiable {
