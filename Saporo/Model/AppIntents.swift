@@ -5,7 +5,6 @@
 //  Created by Natanael nogueira on 11/06/25.
 //
 
-
 import AppIntents
 
 extension Notification.Name {
