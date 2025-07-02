@@ -23,7 +23,7 @@ struct RecipeInstructionsView: View {
         .background {
             BackgroundGeral()
         }
-        .navigationTitle("Preparo")
+        .navigationTitle("Prepare")
         .navigationBarTitleDisplayMode(.inline)
         // NOVO: Adicionado para o atalho de voltar passo
         .onReceive(NotificationCenter.default.publisher(for: .PreviousStep)) { _ in

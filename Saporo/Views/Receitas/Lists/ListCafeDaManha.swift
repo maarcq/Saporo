@@ -14,7 +14,7 @@ struct ListCafeDaManha: View {
     @State private var selectedRecipe: Recipe?
     
     var HViewmodel: HomeViewModel
-    let category: String = "Cafe da manha"
+    let category: String = "Breakfast"
 
     var body: some View {
         
@@ -24,7 +24,7 @@ struct ListCafeDaManha: View {
             } label: {
                 HStack{
                     Text(category)
-                        .font(.poppinsMedium(size: 24))
+                        .font(.poppinsRegular(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
                         .font(Font.poppinsBold(size: 30))
@@ -34,7 +34,7 @@ struct ListCafeDaManha: View {
             
             ScrollView(.horizontal,showsIndicators: false) {
                 HStack {
-                    ForEach(HViewmodel.breadRecipes.results.prefix(5), id: \.id) { recipe in
+                    ForEach(HViewmodel.breadRecipes.results.prefix(10), id: \.id) { recipe in
                         Button {
                             self.selectedRecipe = recipe
                             self.showingSheet = true

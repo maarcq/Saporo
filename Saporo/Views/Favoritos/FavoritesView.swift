@@ -21,18 +21,19 @@ struct FavoritesView: View {
         ScrollView(.vertical) {
             VStack {
                 if viewModel.isLoading {
-                    ProgressView("Carregando favoritos...")
+                    ProgressView("Loading Favorites...")
                 } else if let errorMessage = viewModel.errorMessage {
                     Text("Erro: \(errorMessage)")
                         .foregroundColor(.red)
                         .padding()
                 } else if viewModel.favoriteRecipes.isEmpty {
                     Image("forkandKnife")
-                    Text("Você ainda não favoritou nenhuma receita.\nFavorita alguma na tela de detalhes!")
+                    Text("You haven't favorited any recipe.\nFavorite something in the the Search or Recipe View!")
                         .font(.title)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
                 } else {
+                    
                     LazyVGrid(columns: columns, spacing: 60) {
                         ForEach(viewModel.favoriteRecipes) { recipe in
                             Button {
@@ -51,7 +52,7 @@ struct FavoritesView: View {
                                 Button(role: .destructive) {
                                     viewModel.removeFavorite(recipeID: recipe.id)
                                 } label: {
-                                    Label("Remover dos Favoritos", systemImage: "star.slash.fill")
+                                    Label("Remove Favorites", systemImage: "star.slash.fill")
                                 }
                             }
                         }
@@ -60,9 +61,10 @@ struct FavoritesView: View {
                 }
             }
         }
+        
         .scrollDisabled(viewModel.favoriteRecipes.isEmpty)
         .containerRelativeFrame([.horizontal, .vertical])
-        .padding(.top, 500)
+        //.padding(.top, 500)
         .background {
             BackgroundGeral()
         }

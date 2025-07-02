@@ -22,7 +22,7 @@ struct RecipeQuickDetailView: View {
         NavigationView {
             VStack {
                 if viewModel.isLoading {
-                    ProgressView("Carregando receita...")
+                    ProgressView("Loading Recipe...")
                         .padding()
                 } else if let errorMessage = viewModel.errorMessage {
                     Text("Erro: \(errorMessage)")
@@ -83,13 +83,13 @@ struct RecipeQuickDetailView: View {
                                             }
                                         }
                                         
-                                        HStack {
-                                            Image("paisIcon")
-                                                .resizable()
-                                                .frame(width: 20, height: 20)
-                                            
-                                            Text("Italiana") // Exemplo, substituir com dado real
-                                        }
+//                                        HStack {
+//                                            Image("paisIcon")
+//                                                .resizable()
+//                                                .frame(width: 20, height: 20)
+//                                            
+//                                            Text("Italian") // Exemplo, substituir com dado real
+//                                        }
                                     }
                                     .font(.poppinsMedium(size: 18))
                                     
@@ -100,17 +100,17 @@ struct RecipeQuickDetailView: View {
                                                     .resizable()
                                                     .frame(width: 20, height: 20)
                                                 
-                                                Text("\(servings) porções")
+                                                Text("\(servings) servings")
                                             }
                                         }
                                         
-                                        HStack {
-                                            Image("caloriasIcon")
-                                                .resizable()
-                                                .frame(width: 20, height: 20)
-                                            
-                                            Text("300 calorias") // Exemplo, substituir com dado real
-                                        }
+//                                        HStack {
+//                                            Image("caloriasIcon")
+//                                                .resizable()
+//                                                .frame(width: 20, height: 20)
+//                                            
+//                                            Text("300 calories") // Exemplo, substituir com dado real
+//                                        }
                                     }
                                     .font(.poppinsMedium(size: 18))
                                 }
@@ -119,7 +119,7 @@ struct RecipeQuickDetailView: View {
                             }
                             .padding(.horizontal)
                             
-                            Text("Ingredientes")
+                            Text("Ingredients")
                                 .foregroundColor(Color("ColorCircleInstructions"))
                                 .font(.poppinsBold(size: 28))
                                 .padding(.horizontal)
@@ -140,7 +140,7 @@ struct RecipeQuickDetailView: View {
                                         }
                                     }
                                 } else {
-                                    Text("Nenhum ingrediente listado.")
+                                    Text("No ingridient listed")
                                         .font(.poppinsRegular(size: 20))
                                         .foregroundColor(.secondary)
                                 }
@@ -167,10 +167,10 @@ struct RecipeQuickDetailView: View {
                                 dismiss()
                                 navigationPath.append(analyzedInstructions)
                             } else {
-                                viewModel.errorMessage = "Instruções não disponíveis para esta receita."
+                                viewModel.errorMessage = "Instruction not available for this recipe."
                             }
                         } label: {
-                            Text("Preparar")
+                            Text("Prepare")
                                 .font(.poppinsBold(size: 24))
                                 .foregroundStyle(.white)
                                 .padding(.vertical, 15)
@@ -186,7 +186,7 @@ struct RecipeQuickDetailView: View {
                     .padding(.bottom, 20)
                     
                 } else {
-                    Text("Receita não encontrada ou erro de carregamento.")
+                    Text("Recipe not found or error loading")
                 }
             }
             .navigationTitle("")
@@ -198,7 +198,7 @@ struct RecipeQuickDetailView: View {
                     } label: {
                         HStack {
                             Image(systemName: "chevron.left")
-                            Text("Voltar")
+                            Text("Back")
                         }
                         .font(.poppinsMedium(size: 18))
                         .foregroundStyle(Color("ColorCircleInstructions"))

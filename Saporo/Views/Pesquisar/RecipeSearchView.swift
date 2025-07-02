@@ -76,7 +76,7 @@ struct RecipeSearchView: View {
                 .padding(.top, 30)
             }
             if viewModel.isLoading {
-                ProgressView("Buscando receitas...")
+                ProgressView("Searching recipes...")
                 
             } else if let errorMessage = viewModel.errorMessage {
                 
@@ -135,13 +135,13 @@ struct RecipeListView: View {
     var body: some View {
         Group { // Use Group to handle conditional views easily
             if viewModel.isLoading {
-                ProgressView("Carregando receitas de \(cuisine)...")
+                ProgressView("Loading recipes for \(cuisine)...")
             } else if let errorMessage = viewModel.errorMessage {
                 Text("Erro: \(errorMessage)")
                     .foregroundColor(.red)
                     .padding()
             } else if viewModel.fetchedRecipes.isEmpty {
-                Text("Nenhuma receita encontrada para \(cuisine).")
+                Text("No recipe found for\(cuisine).")
                     .foregroundColor(.gray)
                     .padding()
             } else {

@@ -14,7 +14,7 @@ struct ListSaoJoao: View {
     @State private var selectedRecipe: Recipe?
     
     var HViewmodel: HomeViewModel
-    let category = "Noite de cinema"
+    let category = "Movie Night"
 
     var body: some View {
         
@@ -24,7 +24,7 @@ struct ListSaoJoao: View {
             } label: {
                 HStack{
                     Text(category)
-                        .font(.poppinsMedium(size: 24))
+                        .font(.poppinsRegular(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
                         .font(Font.poppinsBold(size: 30))
@@ -34,7 +34,7 @@ struct ListSaoJoao: View {
             
             ScrollView(.horizontal,showsIndicators: false) {
                 HStack {
-                    ForEach(HViewmodel.saoJoao.results.prefix(5), id: \.id) { recipe in
+                    ForEach(HViewmodel.saoJoao.results.prefix(10), id: \.id) { recipe in
                         Button {
                             self.selectedRecipe = recipe
                             self.showingSheet = true
@@ -47,11 +47,14 @@ struct ListSaoJoao: View {
                 }
             }
         }
-        .sheet(isPresented: $showingSheet) {
-            if let selectedRecipe = selectedRecipe {
-                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath)
-            }
-        }
+        .sheet(item: $selectedRecipe, content: { recipe in
+            RecipeQuickDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
+        })
+//        .sheet(isPresented: $showingSheet) {
+//            if let selectedRecipe = selectedRecipe {
+//                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath)
+//            }
+//        }
     }
 }
 

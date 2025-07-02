@@ -66,7 +66,7 @@ struct BannerView: View {
                             
                             HStack {
                                 Image(systemName: "fork.knife")
-                                Text("\(recipe.servings ?? 0) porções")
+                                Text("\(recipe.servings ?? 0) servings")
                             }
                         }
                         .font(.poppinsBold(size: 20))
