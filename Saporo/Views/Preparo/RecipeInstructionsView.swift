@@ -10,7 +10,7 @@ import SwiftUI
 struct RecipeInstructionsView: View {
     
     @StateObject private var viewModel: RecipeInstructionsViewModel
-    @State private var scrolledID: Int? // Para controle de scroll
+    @State private var scrolledID: Int?
     
     init(analyzedInstructions: [RecipeInformation.AnalyzedInstruction]?) {
         _viewModel = StateObject(wrappedValue: RecipeInstructionsViewModel(analyzedInstructions: analyzedInstructions))
@@ -18,38 +18,26 @@ struct RecipeInstructionsView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            if let errorMessage = viewModel.errorMessage {
-                errorMessageView(message: errorMessage)
-            } else if viewModel.allSteps.isEmpty {
-                emptyInstructionsView()
-            } else if viewModel.showCompletionMessage {
-                completionMessageView()
-            } else {
-                mainContent
-            }
+            mainContent
         }
         .background {
             BackgroundGeral()
         }
         .navigationTitle("Preparo")
         .navigationBarTitleDisplayMode(.inline)
-        .alert("Finalizar Receita", isPresented: $viewModel.showConfirmationAlert) {
-            confirmationAlertButtons
-        } message: {
-            Text("Tem certeza que deseja finalizar a receita?")
+        // NOVO: Adicionado para o atalho de voltar passo
+        .onReceive(NotificationCenter.default.publisher(for: .PreviousStep)) { _ in
+            viewModel.goToPreviousStep()
         }
     }
     
     // MARK: - Subviews
     private var mainContent: some View {
-        VStack {
-            Spacer()
-            HStack {
-                stepCirclesView
-                instructionsScrollView
-            }
-            Spacer()
-            buttonsBar
+        HStack {
+            //exibir e criar circulos baseado no numero de steps
+            stepCirclesView
+            //exibir e colocar a imagen de acordo com o passo
+            instructionsScrollView
         }
     }
     
@@ -57,24 +45,30 @@ struct RecipeInstructionsView: View {
         ScrollView {
             VStack {
                 ForEach(viewModel.allSteps.indices, id: \.self) { index in
+                    //criacao do circulo e da linha
                     stepCircle(index: index)
-                        .padding(.vertical, 60)
+                        .padding(.vertical, 30)
                         .onTapGesture {
+                            //logica para clica no circulo e mover para o passo
                             handleStepTap(index: index)
                         }
                 }
                 Spacer()
             }
             .onReceive(NotificationCenter.default.publisher(for: .NextStep)) { _ in
+                //logica para falar com a siri para mover para o proximo passo
                 viewModel.goToNextStep()
             }
             .padding()
             .frame(maxWidth: 100, maxHeight: .infinity)
+            
         }
+        .scrollIndicators(.hidden)
     }
     
     private func stepCircle(index: Int) -> some View {
         VStack {
+            // numero do passo
             Text("\(index+1)")
                 .scaleEffect(viewModel.currentStepIndex == index ? 1.4 : 1)
                 .animation(.easeInOut, value: viewModel.currentStepIndex)
@@ -82,6 +76,7 @@ struct RecipeInstructionsView: View {
                 .bold()
                 .foregroundStyle(.white)
                 .background {
+                    //circulo vermelho
                     Circle()
                         .fill(Color("ColorCircleInstructions"))
                         .frame(width: 60, height: 60)
@@ -89,14 +84,25 @@ struct RecipeInstructionsView: View {
                         .animation(.easeInOut, value: viewModel.currentStepIndex)
                     
                     if index < viewModel.allSteps.count - 1 {
+                        //linha entre os circulos
                         Rectangle()
                             .fill(Color("ColorCircleInstructions"))
-                            .frame(width: 8, height: 100)
-                            .offset(y: 80)
+                            .frame(width: 8, height: 50)
+                            .offset(y: 50)
                             .zIndex(-1)
                     }
                 }
         }
+    }
+    
+    // MARK: - Handlers
+    private func handleStepTap(index: Int) {
+        withAnimation(.easeInOut(duration: 0.7)) {
+            //usso scrolledID para guiar a scrollView pro passo clicado
+            viewModel.currentStepIndex = index
+            scrolledID = viewModel.allSteps[index].id
+        }
+        viewModel.updateCurrentStepTextAndButtonState()
     }
     
     private var instructionsScrollView: some View {
@@ -105,6 +111,7 @@ struct RecipeInstructionsView: View {
                 ScrollView(.vertical) {
                     LazyVStack(spacing: 0) {
                         ForEach(viewModel.allSteps, id: \.id) { step in
+                            // cria e exibi as imagens e o rexto do passo
                             instructionStepView(step: step)
                                 .containerRelativeFrame(.vertical)
                                 .id(step.id)
@@ -117,15 +124,20 @@ struct RecipeInstructionsView: View {
                     }
                     .scrollTargetLayout()
                 }
+                .ignoresSafeArea()
+                .padding(.bottom,0.2)
+                //logica q controla qual o passo atual
                 .scrollPosition(id: $scrolledID)
                 .scrollTargetBehavior(.paging)
                 .onChange(of: scrolledID) { _, newValue in
+                    //se o valor de scrollID mudar, a tela vai para o currentstepIndex daquele passo
                     if let id = newValue,
                        let index = viewModel.allSteps.firstIndex(where: { $0.id == id }) {
                         viewModel.currentStepIndex = index
                     }
                 }
                 .onChange(of: viewModel.currentStepIndex) { _, newIndex in
+                    //se o valor de scrollID mudar, a tela vai para o ScroolID daquele passo
                     scrolledID = viewModel.allSteps[newIndex].id
                 }
             }
@@ -134,85 +146,31 @@ struct RecipeInstructionsView: View {
     
     private func instructionStepView(step: RecipeInformation.InstructionStep) -> some View {
         VStack {
-            Text(step.step)
-                .font(.title2)
-                .fontWeight(.medium)
-                .multilineTextAlignment(.center)
-                .padding()
+            //texto do passo a passo
+            let formattedText = step.step.replacingOccurrences(of: "\\.(\\s|$)", with: ".\n", options: .regularExpression)
+            
+            Text(formattedText)
+                .font(.poppinsRegular(size: 32))
+                .multilineTextAlignment(.leading)
                 .frame(maxWidth: .infinity)
-                .background(Color(.systemGray6))
-                .cornerRadius(15)
                 .padding(.horizontal)
-        }
-    }
-    
-    private var buttonsBar: some View {
-        HStack(spacing: 20) {
-            // Botões (mantive comentados como no original)
-        }
-        .padding(.bottom, 20)
-    }
-    
-    private func errorMessageView(message: String) -> some View {
-        Text(message)
-            .foregroundColor(.red)
-            .multilineTextAlignment(.center)
-            .padding()
-    }
-    
-    private func emptyInstructionsView() -> some View {
-        Text("Nenhum passo de instrução disponível para esta receita.")
-            .foregroundColor(.secondary)
-            .multilineTextAlignment(.center)
-            .padding()
-    }
-    
-    private func completionMessageView() -> some View {
-        VStack {
-            Spacer()
-            Image(systemName: "hand.thumbsup.fill")
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100, height: 100)
-                .foregroundColor(.green)
-            Text("Parabéns!\nReceita Finalizada!")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .multilineTextAlignment(.center)
-                .padding()
-            Spacer()
-        }
-    }
-    
-    private var backgroundContent: some View {
-        ZStack {
-            Image("TextureHome")
-                .resizable()
-                .scaledToFill()
-                .edgesIgnoringSafeArea(.all)
-            Color("Background")
-                .edgesIgnoringSafeArea(.all)
-        }
-    }
-    
-    private var confirmationAlertButtons: some View {
-        Group {
-            Button("Sim", role: .destructive) {
-                viewModel.confirmFinishRecipe()
-            }
-            Button("Não", role: .cancel) {
-                viewModel.cancelFinishRecipe()
+            //funcao para alinhas a imagem correta pro passo correto
+            HStack(spacing: 30) {
+                if let image = viewModel.getImageAction(for: step.step) {
+                    Image(image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200,height: 200)
+                }
+                if let image = viewModel.getImageInstruments(for: step.step) {
+                    Image(image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200,height: 200)
+                }
+                
             }
         }
-    }
-    
-    // MARK: - Handlers
-    private func handleStepTap(index: Int) {
-        withAnimation(.easeInOut(duration: 0.7)) {
-            viewModel.currentStepIndex = index
-            scrolledID = viewModel.allSteps[index].id
-        }
-        viewModel.updateCurrentStepTextAndButtonState()
     }
 }
 
@@ -221,7 +179,7 @@ struct RecipeInstructionsView: View {
         RecipeInformation.AnalyzedInstruction(
             name: nil,
             steps: [
-                RecipeInformation.InstructionStep(number: 1, step: "Cozinhe a massa conforme as instruções da embalagem até ficar al dente."),
+                RecipeInformation.InstructionStep(number: 1, step: "Cozinhe e whisk a massa conforme as instruções da embalagem até ficar al dente."),
                 RecipeInformation.InstructionStep(number: 2, step: "Enquanto a massa cozinha, aqueça o azeite em uma frigideira grande em fogo médio-alto."),
                 RecipeInformation.InstructionStep(number: 3, step: "Adicione o alho picado e cozinhe por 1 minuto até ficar perfumado, tomando cuidado para não queimar."),
                 RecipeInformation.InstructionStep(number: 4, step: "Escorra a massa e adicione-a à frigideira com o molho. Misture bem para cobrir a massa. Sirva imediatamente.")

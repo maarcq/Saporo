@@ -14,6 +14,9 @@ struct FavoritesView: View {
     
     let columns = [GridItem(.adaptive(minimum: 200), spacing: 16)]
     
+    @State private var showingSheet: Bool = false
+    @State private var selectedRecipeId: Int?
+    
     var body: some View {
         ScrollView(.vertical) {
             VStack {
@@ -32,7 +35,10 @@ struct FavoritesView: View {
                 } else {
                     LazyVGrid(columns: columns, spacing: 60) {
                         ForEach(viewModel.favoriteRecipes) { recipe in
-                            NavigationLink(value: recipe.id) {
+                            Button {
+                                self.selectedRecipeId = recipe.id
+                                self.showingSheet = true
+                            } label: {
                                 HStack(alignment: .top) {
                                     HomeItensView(
                                         image: recipe.image!,
@@ -51,9 +57,6 @@ struct FavoritesView: View {
                         }
                     }
                     .padding(.horizontal, 20)
-                    .navigationDestination(for: Int.self) { recipeId in
-                        RecipeDetailView(recipeId: recipeId, navigationPath: $navigationPath)
-                    }
                 }
             }
         }
@@ -63,9 +66,14 @@ struct FavoritesView: View {
         .background {
             BackgroundGeral()
         }
+        .sheet(isPresented: $showingSheet) {
+            if let id = selectedRecipeId {
+                RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath)
+            }
+        }
     }
 }
-//
-//#Preview {
-//    FavoritesView()
-//}
+
+#Preview {
+    FavoritesView(navigationPath: .constant(NavigationPath()))
+}

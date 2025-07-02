@@ -40,6 +40,7 @@ struct RecipeInformation: Decodable, Identifiable {
     let readyInMinutes: Int?
     let servings: Int?
     let sourceUrl: String?
+    let extendedIngredients: [ExtendedIngredient]?
     
     
     struct AnalyzedInstruction: Decodable, Identifiable, Hashable {
@@ -56,6 +57,17 @@ struct RecipeInformation: Decodable, Identifiable {
     }
     
     let analyzedInstructions: [AnalyzedInstruction]?
+}
+
+struct ExtendedIngredient: Decodable, Identifiable, Hashable {
+    let id: Int?
+    let name: String
+    let amount: Double
+    let unit: String
+    let original: String?
+    let image: String?
+    
+    var uuid: UUID { UUID() }
 }
 
 struct Ingredient: Identifiable, Decodable, Hashable {

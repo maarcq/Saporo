@@ -10,17 +10,20 @@ import SwiftUI
 struct ListSaoJoao: View {
     
     @Binding var navigationPath: NavigationPath
+    @State private var showingSheet: Bool = false
+    @State private var selectedRecipe: Recipe?
     
     var HViewmodel: HomeViewModel
-    
+    let category = "Noite de cinema"
+
     var body: some View {
         
         VStack(alignment: .leading) {
             Button {
-                navigationPath.append(Destination.verMais(recipes: HViewmodel.saoJoao.results))
+                navigationPath.append(Destination.verMais(recipes: HViewmodel.saoJoao.results, text: category))
             } label: {
                 HStack{
-                    Text("Comidas de São João")
+                    Text(category)
                         .font(.poppinsMedium(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
@@ -32,13 +35,21 @@ struct ListSaoJoao: View {
             ScrollView(.horizontal,showsIndicators: false) {
                 HStack {
                     ForEach(HViewmodel.saoJoao.results.prefix(5), id: \.id) { recipe in
-                        NavigationLink(destination: RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)) {
+                        Button {
+                            self.selectedRecipe = recipe
+                            self.showingSheet = true
+                        } label: {
                             VStack {
                                 HomeItensView(image: recipe.image!, nameRecipe: recipe.title, maxReadyTime: recipe.readyInMinutes!)
                             }
                         }
                     }
                 }
+            }
+        }
+        .sheet(isPresented: $showingSheet) {
+            if let selectedRecipe = selectedRecipe {
+                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath)
             }
         }
     }
