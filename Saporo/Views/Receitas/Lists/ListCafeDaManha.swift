@@ -8,14 +8,15 @@
 import SwiftUI
 
 struct ListCafeDaManha: View {
-
+    
     @Binding var navigationPath: NavigationPath
     @State private var showingSheet: Bool = false
     @State private var selectedRecipe: Recipe?
+    
     var HViewmodel: HomeViewModel
-
+    
     var body: some View {
-
+        
         VStack(alignment: .leading) {
             Button {
                 navigationPath.append(Destination.verMais(recipes: HViewmodel.breadRecipes.results))
@@ -29,7 +30,7 @@ struct ListCafeDaManha: View {
                         .padding(.horizontal, 8)
                 }
             }
-
+            
             ScrollView(.horizontal,showsIndicators: false) {
                 HStack {
                     ForEach(HViewmodel.breadRecipes.results.prefix(5), id: \.id) { recipe in

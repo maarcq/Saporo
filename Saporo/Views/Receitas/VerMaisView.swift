@@ -18,7 +18,7 @@ struct VerMaisView: View {
             LazyVGrid(columns: columns, spacing: 0) {
                 ForEach(receitas) { receita in
                     VStack {
-                        Button{
+                        Button {
                             print("clicou no card id:\(receita.id)")
                         } label: {
                             HomeItensView(image: receita.image ?? "", nameRecipe: receita.title, maxReadyTime: receita.readyInMinutes ?? 0)
@@ -30,9 +30,7 @@ struct VerMaisView: View {
             .padding()
         }
         .navigationTitle(text)
-        .background(
-            BackgroundGeral()
-        )
+        .background(BackgroundGeral())
     }
 }
 

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RecipeSearchView: View {
-
+    
     @Binding var navigationPath: NavigationPath
     @StateObject private var viewModel = RecipeSearchViewModel()
     //@StateObject private var viewModelFavorite = FavoritesViewModel()
@@ -20,23 +20,23 @@ struct RecipeSearchView: View {
     
     // NOVO: Adicionado para controlar o foco do TextField
     @FocusState private var isSearchFieldFocused: Bool
-
+    
     var body: some View {
-
         VStack {
             HStack{
                 TextField("Pesquise uma receita", text: $viewModel.searchText)
                     .textFieldStyle(.roundedBorder)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
-//                    .padding(.top, 60)
-//                    .padding(.leading, 8)
-//                    .padding(.trailing, 8)
+                //                    .padding(.top, 60)
+                //                    .padding(.leading, 8)
+                //                    .padding(.trailing, 8)
                     .onSubmit {
                         Task {
                             await viewModel.searchRecipes()
                         }
                     }
+                
                 if !viewModel.searchText.isEmpty {
                     Button(action: {
                         viewModel.searchText = ""
@@ -51,6 +51,7 @@ struct RecipeSearchView: View {
             .padding(.top, 80)
             .padding(.leading, 8)
             .padding(.trailing, 8)
+            
             if viewModel.searchText.isEmpty {
                 NavigationStack {
                     ScrollView(.vertical) {
@@ -69,22 +70,21 @@ struct RecipeSearchView: View {
                     }
                     .containerRelativeFrame([.horizontal, .vertical])
                     .navigationDestination(for: String.self) { cuisine in
-                        RecipeListView(cuisine: cuisine, navigationPath: $navigationPath)
+                        RecipeListView(navigationPath: $navigationPath, cuisine: cuisine)
                     }
                 }
                 .padding(.top, 30)
             }
             
-
             if viewModel.isLoading {
                 ProgressView("Buscando receitas...")
-
+                
             } else if let errorMessage = viewModel.errorMessage {
-
+                
                 Text("Erro: \(errorMessage)")
                     .foregroundColor(.red)
                     .padding()
-
+                
             } else {
                 NavigationStack {
                     ScrollView(.vertical) {
@@ -105,7 +105,7 @@ struct RecipeSearchView: View {
                         RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
                     }
                 }
-
+                
             }
         }
         .background {
@@ -116,9 +116,6 @@ struct RecipeSearchView: View {
                 RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath)
             }
         }
-
-        
-       
         .onReceive(NotificationCenter.default.publisher(for: .SearchByVoice)) { _ in
             isSearchFieldFocused = true
         }
@@ -129,15 +126,18 @@ struct RecipeSearchView: View {
     RecipeSearchView(navigationPath: .constant(NavigationPath()))
 }
 
-
 struct RecipeListView: View {
-    let cuisine: String
+    
     @Binding var navigationPath: NavigationPath
-    @StateObject private var viewModel = RecipeSearchViewModel() // This viewModel will handle the fetching for this specific list
+    // This viewModel will handle the fetching for this specific list
+    @StateObject private var viewModel = RecipeSearchViewModel()
+    
+    let cuisine: String
     let columns = [GridItem(.adaptive(minimum: 200), spacing: 16)]
     
     var body: some View {
-        Group { // Use Group to handle conditional views easily
+        // Use Group to handle conditional views easily
+        Group {
             if viewModel.isLoading {
                 ProgressView("Carregando receitas de \(cuisine)...")
             } else if let errorMessage = viewModel.errorMessage {

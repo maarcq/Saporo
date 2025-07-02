@@ -8,15 +8,16 @@
 import SwiftUI
 
 struct RecipeQuickDetailView: View {
+    
     @Environment(\.dismiss) var dismiss
     @StateObject private var viewModel: RecipeDetailViewModel
     @Binding var navigationPath: NavigationPath
-
+    
     init(recipeId: Int, navigationPath: Binding<NavigationPath>) {
         _viewModel = StateObject(wrappedValue: RecipeDetailViewModel(recipeId: recipeId))
         _navigationPath = navigationPath
     }
-
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -62,46 +63,52 @@ struct RecipeQuickDetailView: View {
                                         .cornerRadius(16)
                                         .foregroundColor(.gray)
                                 }
-
+                                
                                 VStack(alignment: .leading, spacing: 10) {
                                     Text(recipe.title)
                                         .foregroundColor(Color("ColorCircleInstructions"))
-                                        .font(.poppinsMedium(size: 32)) // Ajustado para PoppinsMedium como no mockup
+                                        .font(.poppinsMedium(size: 32))
                                         .lineLimit(2)
                                         .minimumScaleFactor(0.7)
                                         .padding(.bottom, 5)
-
+                                    
                                     HStack(spacing: 20) {
                                         if let readyInMinutes = recipe.readyInMinutes {
                                             HStack {
-                                                Image("tempoIcon") // MODIFICADO: Usando "tempoIcon"
+                                                Image("tempoIcon")
                                                     .resizable()
-                                                    .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
+                                                    .frame(width: 20, height: 20)
+                                                
                                                 Text("\(readyInMinutes) min")
                                             }
                                         }
+                                        
                                         HStack {
-                                            Image("paisIcon") // MODIFICADO: Usando "paisIcon"
+                                            Image("paisIcon")
                                                 .resizable()
-                                                .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
+                                                .frame(width: 20, height: 20)
+                                            
                                             Text("Italiana") // Exemplo, substituir com dado real
                                         }
                                     }
                                     .font(.poppinsMedium(size: 18))
-
+                                    
                                     HStack(spacing: 20) {
                                         if let servings = recipe.servings {
                                             HStack {
-                                                Image("porcaoIcon") // MODIFICADO: Usando "porcaoIcon"
+                                                Image("porcaoIcon")
                                                     .resizable()
-                                                    .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
+                                                    .frame(width: 20, height: 20)
+                                                
                                                 Text("\(servings) porções")
                                             }
                                         }
+                                        
                                         HStack {
-                                            Image("caloriasIcon") // MODIFICADO: Usando "caloriasIcon"
+                                            Image("caloriasIcon")
                                                 .resizable()
-                                                .frame(width: 20, height: 20) // Ajuste o tamanho conforme necessário
+                                                .frame(width: 20, height: 20)
+                                            
                                             Text("300 calorias") // Exemplo, substituir com dado real
                                         }
                                     }
@@ -111,7 +118,7 @@ struct RecipeQuickDetailView: View {
                                 .padding(.top, 10)
                             }
                             .padding(.horizontal)
-
+                            
                             Text("Ingredientes")
                                 .foregroundColor(Color("ColorCircleInstructions"))
                                 .font(.poppinsBold(size: 28))
@@ -146,13 +153,15 @@ struct RecipeQuickDetailView: View {
                             )
                             .padding(.horizontal)
                             .padding(.top, 5)
-
+                            
                             Spacer()
                         }
                     }
                     
                     HStack {
+                        
                         Spacer()
+                        
                         Button {
                             if let analyzedInstructions = recipe.analyzedInstructions, !analyzedInstructions.isEmpty {
                                 dismiss()
@@ -170,6 +179,7 @@ struct RecipeQuickDetailView: View {
                                 .cornerRadius(15)
                         }
                         .disabled(recipe.analyzedInstructions?.isEmpty ?? true)
+                        
                         Spacer()
                     }
                     .padding(.horizontal)
@@ -194,6 +204,7 @@ struct RecipeQuickDetailView: View {
                         .foregroundStyle(Color("ColorCircleInstructions"))
                     }
                 }
+                
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
                         viewModel.toggleFavorite()

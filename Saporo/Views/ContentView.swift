@@ -11,13 +11,13 @@ import UIKit
 struct ContentView: View {
     
     @State private var selectedTab: Tabs = .home
-    
     @State private var navigationPath = NavigationPath()
     
     @AppStorage("sidebarCustomizations") private var tabViewCustomization: TabViewCustomization = TabViewCustomization()
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
+            
             TabView(selection: $selectedTab) {
                 // MARK: PESQUISAR
                 Tab(Tabs.search.title, image: Tabs.search.icon, value: Tabs.search) {
@@ -37,11 +37,11 @@ struct ContentView: View {
                 }
                 .customizationID(Tabs.favorites.customizationID)
                 
-                // MARK: CONFIGURAÇÕES
-                Tab(Tabs.settings.title, image: Tabs.settings.icon, value: Tabs.settings) {
-                    SettingsView()
-                }
-                .customizationID(Tabs.settings.customizationID)
+                //                // MARK: CONFIGURAÇÕES
+                //                Tab(Tabs.settings.title, image: Tabs.settings.icon, value: Tabs.settings) {
+                //                    SettingsView()
+                //                }
+                //                .customizationID(Tabs.settings.customizationID)
             }
             .tabViewStyle(.sidebarAdaptable)
             .tabViewCustomization($tabViewCustomization)

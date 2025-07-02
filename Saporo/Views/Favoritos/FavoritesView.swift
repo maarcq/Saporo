@@ -8,15 +8,15 @@
 import SwiftUI
 
 struct FavoritesView: View {
-
+    
     @Binding var navigationPath: NavigationPath
     @StateObject private var viewModel = FavoritesViewModel()
-
+    
     let columns = [GridItem(.adaptive(minimum: 200), spacing: 16)]
-
+    
     @State private var showingSheet: Bool = false
     @State private var selectedRecipeId: Int?
-
+    
     var body: some View {
         ScrollView(.vertical) {
             VStack {
@@ -46,7 +46,7 @@ struct FavoritesView: View {
                                         maxReadyTime: recipe.readyInMinutes!
                                     )
                                 }
-                            } 
+                            }
                             .contextMenu {
                                 Button(role: .destructive) {
                                     viewModel.removeFavorite(recipeID: recipe.id)

@@ -39,7 +39,7 @@ struct HomeView: View {
         }
     }
 }
-    
+
 #Preview {
     HomeView(navigationPath: .constant(NavigationPath()))
 }
