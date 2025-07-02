@@ -1,5 +1,7 @@
 # Saporo 🫒
 
+![Capa](https://github.com/maarcq/Saporo/blob/develop/Saporo/Assets.xcassets/imagemReadme.imageset/imagemReadme.png)
+
 O Saporo reinventa a experiência culinária, tornando-a mais acessível, prática e personalizada para o cotidiano moderno. Com tecnologia inteligente e foco em UX, o app permite cozinhar com facilidade - até mesmo com as mãos ocupadas!
 
 ## Proposta de Valor  🍳
