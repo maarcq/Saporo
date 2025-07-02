@@ -14,15 +14,16 @@ struct ListCafeDaManha: View {
     @State private var selectedRecipe: Recipe?
     
     var HViewmodel: HomeViewModel
-    
+    let category: String = "Cafe da manha"
+
     var body: some View {
         
         VStack(alignment: .leading) {
             Button {
-                navigationPath.append(Destination.verMais(recipes: HViewmodel.breadRecipes.results))
+                navigationPath.append(Destination.verMais(recipes: HViewmodel.breadRecipes.results, text: category))
             } label: {
                 HStack{
-                    Text("Café da Manhã")
+                    Text(category)
                         .font(.poppinsMedium(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
