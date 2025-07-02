@@ -38,10 +38,10 @@ struct ContentView: View {
                 .customizationID(Tabs.favorites.customizationID)
                 
                 // MARK: CONFIGURAÇÕES
-                Tab(Tabs.settings.title, image: Tabs.settings.icon, value: Tabs.settings) {
-                    SettingsView()
-                }
-                .customizationID(Tabs.settings.customizationID)
+//                Tab(Tabs.settings.title, image: Tabs.settings.icon, value: Tabs.settings) {
+//                    SettingsView()
+//                }
+//                .customizationID(Tabs.settings.customizationID)
             }
             .tabViewStyle(.sidebarAdaptable)
             .tabViewCustomization($tabViewCustomization)

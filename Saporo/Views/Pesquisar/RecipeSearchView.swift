@@ -6,6 +6,13 @@
 //
 
 import SwiftUI
+import TipKit
+
+struct FavoriteLandmarkTip: Tip {
+    var title: Text {
+        Text("Pesquise uma receita")
+    }
+}
 
 struct RecipeSearchView: View {
     
@@ -18,7 +25,7 @@ struct RecipeSearchView: View {
         
         VStack {
             HStack{
-                TextField("Pesquise uma receita", text: $viewModel.searchText)
+                TextField("Search a recipe", text: $viewModel.searchText)
                     .textFieldStyle(.roundedBorder)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
