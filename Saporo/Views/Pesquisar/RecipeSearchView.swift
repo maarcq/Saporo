@@ -30,11 +30,15 @@ struct RecipeSearchView: View {
                     .textFieldStyle(.roundedBorder)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
+                //                    .padding(.top, 60)
+                //                    .padding(.leading, 8)
+                //                    .padding(.trailing, 8)
                     .onSubmit {
                         Task {
                             await viewModel.searchRecipes()
                         }
                     }
+                
                 if !viewModel.searchText.isEmpty {
                     Button(action: {
                         viewModel.searchText = ""
@@ -48,6 +52,7 @@ struct RecipeSearchView: View {
             .padding(.top, 80)
             .padding(.leading, 8)
             .padding(.trailing, 8)
+            
             if viewModel.searchText.isEmpty {
                     ScrollView(.vertical) {
                         LazyVGrid(columns: columns, spacing: 60) {
@@ -66,8 +71,13 @@ struct RecipeSearchView: View {
                         .padding(.horizontal, 20)
                     }
                     .containerRelativeFrame([.horizontal, .vertical])
+                    .navigationDestination(for: String.self) { cuisine in
+                        RecipeListView(navigationPath: $navigationPath, cuisine: cuisine)
+                    }
+                }
                 .padding(.top, 30)
             }
+            
             if viewModel.isLoading {
                 ProgressView("Buscando receitas...")
                 
@@ -96,6 +106,11 @@ struct RecipeSearchView: View {
                         }
                     }
                     .scrollContentBackground(.hidden)
+                    .navigationDestination(for: Recipe.self) { recipe in
+                        RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
+                    }
+                }
+                
             }
         }
         .background {
@@ -121,12 +136,11 @@ struct RecipeListView: View {
     @State private var selectedRecipe: Recipe?
     
     let cuisine: String
-    @Binding var navigationPath: NavigationPath
-    @StateObject private var viewModel = RecipeSearchViewModel() // This viewModel will handle the fetching for this specific list
     let columns = [GridItem(.adaptive(minimum: 200), spacing: 16)]
     
     var body: some View {
-        Group { // Use Group to handle conditional views easily
+        // Use Group to handle conditional views easily
+        Group {
             if viewModel.isLoading {
                 ProgressView("Carregando receitas de \(cuisine)...")
             } else if let errorMessage = viewModel.errorMessage {

@@ -9,11 +9,14 @@ import Foundation
 import SwiftUI
 
 struct BannerView: View {
+    
+    @Binding var navigationPath: NavigationPath
+    
     @State private var showingSheet: Bool = false
     @State private var selectedRecipeId: Int?
-    @Binding var navigationPath: NavigationPath
-    let recipes: [Recipe]
     @State private var currentIndex: Int = 0
+    
+    let recipes: [Recipe]
     
     private var recipeinfo: Recipe? {
         guard recipes.indices.contains(currentIndex) else { return nil }
@@ -21,8 +24,7 @@ struct BannerView: View {
     }
     
     var body: some View {
-        
-        Button{
+        Button {
             if let recipeinfo {
                 self.selectedRecipeId = recipeinfo.id
                 self.showingSheet = true
@@ -46,8 +48,10 @@ struct BannerView: View {
                 }
                 .tabViewStyle(.page)
                 .frame(height: 250)
+                
                 if recipes.indices.contains(currentIndex) {
                     let recipe = recipes[currentIndex]
+                    
                     VStack(alignment: .leading, spacing: 24) {
                         Text(recipe.title)
                             .font(.poppinsBold(size: 32))

@@ -19,7 +19,7 @@ struct ListBanner: View {
     var body: some View {
         
         VStack(alignment: .leading) {
-                        BannerView(navigationPath: $navigationPath, recipes: HViewmodel.sobremesas.results)
+            BannerView(navigationPath: $navigationPath, recipes: HViewmodel.sobremesas.results)
         }
     }
 }

@@ -5,10 +5,10 @@
 //  Created by Bernardo Santos Maranhão Maia on 17/06/25.
 //
 
-
 import SwiftUI
 
 struct RecipeInstructionsView: View {
+    
     @StateObject private var viewModel: RecipeInstructionsViewModel
     @State private var scrolledID: Int?
     
@@ -94,6 +94,7 @@ struct RecipeInstructionsView: View {
                 }
         }
     }
+    
     // MARK: - Handlers
     private func handleStepTap(index: Int) {
         withAnimation(.easeInOut(duration: 0.7)) {
@@ -103,6 +104,7 @@ struct RecipeInstructionsView: View {
         }
         viewModel.updateCurrentStepTextAndButtonState()
     }
+    
     private var instructionsScrollView: some View {
         VStack {
             ScrollViewReader { proxy in

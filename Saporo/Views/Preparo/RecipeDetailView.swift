@@ -91,14 +91,14 @@ struct RecipeDetailView: View {
                         //                                .frame(maxWidth: .infinity)
                         //                                .background(Color.accentColor)
                         //                                .cornerRadius(10)
-//                        Button {
-//                            navigationPath.append(Destination.preparoReceita)
-//                        } label: {
-//                            Image(systemName: "checklist.checked")
-//                            Text("ir para o passo a passo")
-//                                .font(.headline)
-//                                .padding()
-//                        }
+                        //                        Button {
+                        //                            navigationPath.append(Destination.preparoReceita)
+                        //                        } label: {
+                        //                            Image(systemName: "checklist.checked")
+                        //                            Text("ir para o passo a passo")
+                        //                                .font(.headline)
+                        //                                .padding()
+                        //                        }
                         //                            NavigationLink(destination: RecipeInstructionsView(analyzedInstructions: analyzedInstructions)) {
                         //                                HStack {
                         //                                    Image(systemName: "checklist.checked")

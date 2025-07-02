@@ -5,20 +5,19 @@
 //  Created by Marcelle Ribeiro Queiroz on 26/06/25.
 //
 
-
 import SwiftUI
 
 struct ListSobremesas: View {
-
+    
     @Binding var navigationPath: NavigationPath
     @State private var showingSheet: Bool = false
     @State private var selectedRecipe: Recipe?
-
+    
     var HViewmodel: HomeViewModel
     let category: String = "Sobremessas"
 
     var body: some View {
-
+        
         VStack(alignment: .leading) {
             Button {
                 navigationPath.append(Destination.verMais(recipes: HViewmodel.sobremesas.results, text: category))
@@ -32,7 +31,7 @@ struct ListSobremesas: View {
                         .padding(.horizontal, 8)
                 }
             }
-
+            
             ScrollView(.horizontal,showsIndicators: false) {
                 HStack {
                     ForEach(HViewmodel.sobremesas.results.prefix(5), id: \.id) { recipe in
@@ -50,7 +49,7 @@ struct ListSobremesas: View {
         }
         .sheet(isPresented: $showingSheet) {
             if let selectedRecipe = selectedRecipe {
-                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath) 
+                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath)
             }
         }
     }

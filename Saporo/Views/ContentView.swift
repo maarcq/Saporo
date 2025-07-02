@@ -11,13 +11,13 @@ import UIKit
 struct ContentView: View {
     
     @State private var selectedTab: Tabs = .home
-    
     @State private var navigationPath = NavigationPath()
     
     @AppStorage("sidebarCustomizations") private var tabViewCustomization: TabViewCustomization = TabViewCustomization()
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
+            
             TabView(selection: $selectedTab) {
                 // MARK: PESQUISAR
                 Tab(Tabs.search.title, image: Tabs.search.icon, value: Tabs.search) {
