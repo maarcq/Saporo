@@ -29,7 +29,6 @@ struct ContentView: View {
                 Tab(Tabs.home.title, image: Tabs.home.icon, value: Tabs.home) {
                     HomeView(navigationPath: $navigationPath)
                 }
-                .customizationID(Tabs.home.customizationID)
                 
                 // MARK: FAVORITOS
                 Tab(Tabs.favorites.title, image: Tabs.favorites.icon, value: Tabs.favorites) {
@@ -38,10 +37,7 @@ struct ContentView: View {
                 .customizationID(Tabs.favorites.customizationID)
                 
                 // MARK: CONFIGURAÇÕES
-                Tab(Tabs.settings.title, image: Tabs.settings.icon, value: Tabs.settings) {
-                    SettingsView()
-                }
-                .customizationID(Tabs.settings.customizationID)
+
             }
             .tabViewStyle(.sidebarAdaptable)
             .tabViewCustomization($tabViewCustomization)
@@ -57,8 +53,10 @@ struct ContentView: View {
             }
             .navigationDestination(for: Destination.self) { destination in
                 switch destination {
-                case .verMais(recipes: let recipes):
-                    VerMaisView(text: "Comidas de São João", receitas: recipes)
+                case .verMais(recipes: let recipes, text: let category):
+                    VerMaisView(navigationPath: $navigationPath, text: category, receitas: recipes)
+                case .recipeList(cuisine: let cuisine):
+                    RecipeListView(cuisine: cuisine, navigationPath: $navigationPath)
                 }
             }
             .navigationDestination(for: [RecipeInformation.AnalyzedInstruction].self) { instructions in

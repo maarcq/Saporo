@@ -32,12 +32,6 @@ struct BannerView: View {
                 TabView (selection: $currentIndex) {
                     ForEach(Array(recipes.enumerated().prefix(5)), id: \.1.id) { index, recipe in
                         if let imageName = recipe.image {
-                            //                            Image(imageName)
-                            //                                .resizable()
-                            //                                .aspectRatio(contentMode: .fill)
-                            //                                .frame(width: 400, height: 235)
-                            //                                .cornerRadius(16)
-                            //                                .tag(index)
                             AsyncImage(url: URL(string: imageName)) { image in
                                 image.image?
                                     .resizable()
@@ -50,7 +44,7 @@ struct BannerView: View {
                         }
                     }
                 }
-                .tabViewStyle(.page(indexDisplayMode: .never))
+                .tabViewStyle(.page)
                 .frame(height: 250)
                 if recipes.indices.contains(currentIndex) {
                     let recipe = recipes[currentIndex]

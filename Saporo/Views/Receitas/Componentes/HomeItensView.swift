@@ -16,20 +16,6 @@ struct HomeItensView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            //            Image(image)
-            //                .resizable()
-            //                .scaledToFill()
-            //                .frame(width: 200, height: 150)
-            //                .cornerRadius(16)
-            
-            //            AsyncImage(url: URL(string: image)) { image in
-            //                image.image?
-            //                    .resizable()
-            //                    .scaledToFill()
-            //                    .frame(width: 200, height: 180)
-            //                    .cornerRadius(16)
-            //            }
-            
             if let url = URL(string: image), image.contains("http") {
                 // Imagem de URL (API)
                 AsyncImage(url: url) { phase in
@@ -44,9 +30,9 @@ struct HomeItensView: View {
                             .frame(width: 200, height: 180)
                             .cornerRadius(16)
                     case .failure:
-                        Image(systemName: "exclamationmark.triangle")
+                        Image("forkandKnife")
                             .resizable()
-                            .frame(width: 200, height: 180)
+                            .frame(width: 180, height: 180)
                             .cornerRadius(16)
                     @unknown default:
                         EmptyView()

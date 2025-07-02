@@ -13,15 +13,16 @@ struct ListSaoJoao: View {
     @State private var showingSheet: Bool = false
     @State private var selectedRecipe: Recipe?
     var HViewmodel: HomeViewModel
+    let category = "Noite de cinema"
 
     var body: some View {
 
         VStack(alignment: .leading) {
             Button {
-                navigationPath.append(Destination.verMais(recipes: HViewmodel.saoJoao.results))
+                navigationPath.append(Destination.verMais(recipes: HViewmodel.saoJoao.results, text: category))
             } label: {
                 HStack{
-                    Text("Comidas de São João")
+                    Text(category)
                         .font(.poppinsMedium(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
@@ -47,7 +48,7 @@ struct ListSaoJoao: View {
         }
         .sheet(isPresented: $showingSheet) {
             if let selectedRecipe = selectedRecipe {
-                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath) // MODIFICADO AQUI
+                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath)
             }
         }
     }

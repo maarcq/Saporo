@@ -8,30 +8,28 @@
 import SwiftUI
 
 struct RecipeSearchView: View {
-
+    @State private var showingSheet: Bool = false
+    @State private var selectedRecipe: Recipe?
+    
     @Binding var navigationPath: NavigationPath
     @StateObject private var viewModel = RecipeSearchViewModel()
     //@StateObject private var viewModelFavorite = FavoritesViewModel()
     let columns = [GridItem(.adaptive(minimum: 200), spacing: 16)]
     
     // New state variables for sheet presentation
-    @State private var showingSheet: Bool = false
     @State private var selectedRecipeId: Int? // To store the ID of the recipe selected for the sheet
     
     // NOVO: Adicionado para controlar o foco do TextField
     @FocusState private var isSearchFieldFocused: Bool
-
+    
     var body: some View {
-
+        
         VStack {
             HStack{
                 TextField("Pesquise uma receita", text: $viewModel.searchText)
                     .textFieldStyle(.roundedBorder)
                     .autocorrectionDisabled()
                     .textInputAutocapitalization(.never)
-//                    .padding(.top, 60)
-//                    .padding(.leading, 8)
-//                    .padding(.trailing, 8)
                     .onSubmit {
                         Task {
                             await viewModel.searchRecipes()
@@ -45,18 +43,18 @@ struct RecipeSearchView: View {
                         Image(systemName: "xmark.circle.fill")
                             .foregroundColor(.gray)
                     }
-                    //.padding(.trailing, 8)
                 }
             }
             .padding(.top, 80)
             .padding(.leading, 8)
             .padding(.trailing, 8)
             if viewModel.searchText.isEmpty {
-                NavigationStack {
                     ScrollView(.vertical) {
                         LazyVGrid(columns: columns, spacing: 60) {
                             ForEach(viewModel.staticCulinaryCategories) { cuisine in
-                                NavigationLink(value: cuisine.name) {
+                                Button{
+                                    navigationPath.append(Destination.recipeList(cuisine:cuisine.name))
+                                } label: {
                                     HomeItensView(
                                         image: cuisine.imageName,
                                         nameRecipe: cuisine.name,
@@ -68,57 +66,46 @@ struct RecipeSearchView: View {
                         .padding(.horizontal, 20)
                     }
                     .containerRelativeFrame([.horizontal, .vertical])
-                    .navigationDestination(for: String.self) { cuisine in
-                        RecipeListView(cuisine: cuisine, navigationPath: $navigationPath)
-                    }
-                }
                 .padding(.top, 30)
             }
-            
-
             if viewModel.isLoading {
                 ProgressView("Buscando receitas...")
-
+                
             } else if let errorMessage = viewModel.errorMessage {
-
+                
                 Text("Erro: \(errorMessage)")
                     .foregroundColor(.red)
                     .padding()
-
+                
             } else {
-                NavigationStack {
                     ScrollView(.vertical) {
                         LazyVGrid(columns: columns, spacing: 60) {
                             ForEach(viewModel.recipes) { recipe in
-                                NavigationLink(value: recipe) {
+                                Button{
+                                    self.selectedRecipe = recipe
+                                    self.showingSheet = true
+                                } label: {
                                     HomeItensView(
                                         image: recipe.image!,
                                         nameRecipe: recipe.title,
                                         maxReadyTime: nil
                                     )
                                 }
+                                
                             }
                         }
                     }
                     .scrollContentBackground(.hidden)
-                    .navigationDestination(for: Recipe.self) { recipe in
-                        RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
-                    }
-                }
-
             }
         }
         .background {
             BackgroundGeral()
         }
         .sheet(isPresented: $showingSheet) {
-            if let id = selectedRecipeId {
-                RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath)
+            if let selectedrecipe = selectedRecipe {
+                RecipeQuickDetailView(recipeId: selectedrecipe.id, navigationPath: $navigationPath)
             }
         }
-
-        
-       
         .onReceive(NotificationCenter.default.publisher(for: .SearchByVoice)) { _ in
             isSearchFieldFocused = true
         }
@@ -129,8 +116,10 @@ struct RecipeSearchView: View {
     RecipeSearchView(navigationPath: .constant(NavigationPath()))
 }
 
-
 struct RecipeListView: View {
+    @State private var showingSheet: Bool = false
+    @State private var selectedRecipe: Recipe?
+    
     let cuisine: String
     @Binding var navigationPath: NavigationPath
     @StateObject private var viewModel = RecipeSearchViewModel() // This viewModel will handle the fetching for this specific list
@@ -153,33 +142,24 @@ struct RecipeListView: View {
                     ScrollView(.vertical) {
                         LazyVGrid(columns: columns, spacing: 60) {
                             ForEach(viewModel.fetchedRecipes) { recipe in // Display fetchedRecipes here
-                                NavigationLink(value: recipe) {
+                                Button{
+                                    self.selectedRecipe = recipe
+                                    self.showingSheet = true
+                                } label: {
                                     HomeItensView(
                                         image: recipe.image!,
                                         nameRecipe: recipe.title,
                                         maxReadyTime: nil
                                     )
-                                    //                            HStack {
-                                    //                                if let url = URL(string: recipe.image ?? "") {
-                                    //                                    AsyncImage(url: url) { image in
-                                    //                                        image.resizable()
-                                    //                                            .aspectRatio(contentMode: .fit)
-                                    //                                            .frame(width: 50, height: 50)
-                                    //                                            .cornerRadius(8)
-                                    //                                    } placeholder: {
-                                    //                                        ProgressView()
-                                    //                                            .frame(width: 50, height: 50)
-                                    //                                    }
-                                    //                                }
-                                    //                                Text(recipe.title)
-                                    //                            }
                                 }
                             }
                         }
                     }
                     .scrollContentBackground(.hidden)
-                    .navigationDestination(for: Recipe.self) { recipe in
-                        RecipeDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
+                }
+                .sheet(isPresented: $showingSheet) {
+                    if let selectedrecipe = selectedRecipe {
+                        RecipeQuickDetailView(recipeId: selectedrecipe.id, navigationPath: $navigationPath)
                     }
                 }
             }
