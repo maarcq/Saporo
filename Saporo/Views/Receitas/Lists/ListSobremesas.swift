@@ -14,12 +14,13 @@ struct ListSobremesas: View {
     @State private var selectedRecipe: Recipe?
     
     var HViewmodel: HomeViewModel
-    
+    let category: String = "Sobremessas"
+
     var body: some View {
         
         VStack(alignment: .leading) {
             Button {
-                navigationPath.append(Destination.verMais(recipes: HViewmodel.sobremesas.results))
+                navigationPath.append(Destination.verMais(recipes: HViewmodel.sobremesas.results, text: category))
             } label: {
                 HStack{
                     Text("Sobremesas")

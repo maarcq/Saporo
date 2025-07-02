@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 
-struct CulinaryCategory: Identifiable {
+struct CulinaryCategory: Identifiable, Hashable {
     let id = UUID()
     let name: String
     let imageName: String
