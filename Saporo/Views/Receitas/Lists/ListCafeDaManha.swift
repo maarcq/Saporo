@@ -1,0 +1,60 @@
+//
+//  ListSobremesas.swift
+//  Saporo
+//
+//  Created by Marcelle Ribeiro Queiroz on 26/06/25.
+//
+
+import SwiftUI
+
+struct ListCafeDaManha: View {
+    
+    @Binding var navigationPath: NavigationPath
+    @State private var showingSheet: Bool = false
+    @State private var selectedRecipe: Recipe?
+    
+    var HViewmodel: HomeViewModel
+    
+    var body: some View {
+        
+        VStack(alignment: .leading) {
+            Button {
+                navigationPath.append(Destination.verMais(recipes: HViewmodel.breadRecipes.results))
+            } label: {
+                HStack{
+                    Text("Café da Manhã")
+                        .font(.poppinsMedium(size: 24))
+                        .foregroundStyle(Color("LabelsColor"))
+                    Text(">")
+                        .font(Font.poppinsBold(size: 30))
+                        .padding(.horizontal, 8)
+                }
+            }
+            
+            ScrollView(.horizontal,showsIndicators: false) {
+                HStack {
+                    ForEach(HViewmodel.breadRecipes.results.prefix(5), id: \.id) { recipe in
+                        Button {
+                            self.selectedRecipe = recipe
+                            self.showingSheet = true
+                        } label: {
+                            VStack {
+                                HomeItensView(image: recipe.image!, nameRecipe: recipe.title, maxReadyTime: recipe.readyInMinutes!)
+                            }
+                        }
+                    }
+                }
+                .padding(.trailing)
+            }
+        }
+        .sheet(isPresented: $showingSheet) {
+            if let selectedRecipe = selectedRecipe {
+                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath) // MODIFICADO AQUI
+            }
+        }
+    }
+}
+
+#Preview {
+    ListCafeDaManha(navigationPath: .constant(NavigationPath()), HViewmodel: HomeViewModel())
+}
