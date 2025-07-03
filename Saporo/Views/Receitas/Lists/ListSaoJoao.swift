@@ -24,7 +24,7 @@ struct ListSaoJoao: View {
             } label: {
                 HStack{
                     Text(category)
-                        .font(.poppinsRegular(size: 24))
+                        .font(.poppinsMedium(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
                         .font(Font.poppinsBold(size: 30))

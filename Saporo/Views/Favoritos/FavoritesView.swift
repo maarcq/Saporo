@@ -26,12 +26,15 @@ struct FavoritesView: View {
                     Text("Erro: \(errorMessage)")
                         .foregroundColor(.red)
                         .padding()
+                    
                 } else if viewModel.favoriteRecipes.isEmpty {
                     Image("forkandKnife")
+                        .padding(.top, 150)
                     Text("You haven't favorited any recipe.\nFavorite something in the the Search or Recipe View!")
                         .font(.title)
                         .foregroundColor(.secondary)
                         .multilineTextAlignment(.center)
+                        
                 } else {
                     
                     LazyVGrid(columns: columns, spacing: 60) {
@@ -68,6 +71,7 @@ struct FavoritesView: View {
         .background {
             BackgroundGeral()
         }
+        
         .sheet(isPresented: $showingSheet) {
             if let id = selectedRecipeId {
                 RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath)

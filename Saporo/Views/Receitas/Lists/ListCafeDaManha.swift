@@ -24,7 +24,7 @@ struct ListCafeDaManha: View {
             } label: {
                 HStack{
                     Text(category)
-                        .font(.poppinsRegular(size: 24))
+                        .font(.poppinsMedium(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
                         .font(Font.poppinsBold(size: 30))
@@ -48,11 +48,9 @@ struct ListCafeDaManha: View {
                 .padding(.trailing)
             }
         }
-        .sheet(isPresented: $showingSheet) {
-            if let selectedRecipe = selectedRecipe {
-                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath) // MODIFICADO AQUI
-            }
-        }
+        .sheet(item: $selectedRecipe, content: { recipe in
+            RecipeQuickDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
+        })
     }
 }
 

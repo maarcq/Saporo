@@ -24,7 +24,7 @@ struct ListSobremesas: View {
             } label: {
                 HStack{
                     Text("Desserts")
-                        .font(.poppinsRegular(size: 24))
+                        .font(.poppinsMedium(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
                         .font(Font.poppinsBold(size: 30))
@@ -47,11 +47,9 @@ struct ListSobremesas: View {
                 }
             }
         }
-        .sheet(isPresented: $showingSheet) {
-            if let selectedRecipe = selectedRecipe {
-                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath)
-            }
-        }
+        .sheet(item: $selectedRecipe, content: { recipe in
+            RecipeQuickDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
+        })
     }
 }
 

@@ -10,22 +10,9 @@
 		3089E5692E0D7CC6006CFEB3 /* Saporo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Saporo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		D5449D0C2E157F5A008B462B /* Exceptions for "Saporo" folder in "Saporo" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Resources/Poppins-Medium.ttf",
-			);
-			target = 3089E5682E0D7CC6006CFEB3 /* Saporo */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3089E56B2E0D7CC6006CFEB3 /* Saporo */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				D5449D0C2E157F5A008B462B /* Exceptions for "Saporo" folder in "Saporo" target */,
-			);
 			path = Saporo;
 			sourceTree = "<group>";
 		};
