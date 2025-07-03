@@ -15,6 +15,7 @@ struct BannerView: View {
     @State private var showingSheet: Bool = false
     @State private var selectedRecipeId: Int?
     @State private var currentIndex: Int = 0
+    @State private var selectedRecipe: Recipe?
     
     let recipes: [Recipe]
     
@@ -26,7 +27,7 @@ struct BannerView: View {
     var body: some View {
         Button {
             if let recipeinfo {
-                self.selectedRecipeId = recipeinfo.id
+                self.selectedRecipe = recipeinfo
                 self.showingSheet = true
             }
         } label: {
@@ -94,11 +95,9 @@ struct BannerView: View {
                 }
             }
         }
-        .sheet(isPresented: $showingSheet) {
-            if let id = selectedRecipeId {
-                RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath)
-            }
-        }
+        .sheet(item: $selectedRecipe, content: { recipe in
+            RecipeQuickDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
+        })
     }
 }
 

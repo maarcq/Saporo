@@ -11,6 +11,7 @@ struct FavoritesView: View {
     
     @Binding var navigationPath: NavigationPath
     @StateObject private var viewModel = FavoritesViewModel()
+    @State private var selectedRecipe: RecipeInformation?
     
     let columns = [GridItem(.adaptive(minimum: 200), spacing: 16)]
     
@@ -37,7 +38,7 @@ struct FavoritesView: View {
                     LazyVGrid(columns: columns, spacing: 60) {
                         ForEach(viewModel.favoriteRecipes) { recipe in
                             Button {
-                                self.selectedRecipeId = recipe.id
+                                self.selectedRecipe = recipe
                                 self.showingSheet = true
                             } label: {
                                 HStack(alignment: .top) {
@@ -68,11 +69,14 @@ struct FavoritesView: View {
         .background {
             BackgroundGeral()
         }
-        .sheet(isPresented: $showingSheet) {
-            if let id = selectedRecipeId {
-                RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath)
-            }
-        }
+//        .sheet(isPresented: $showingSheet) {
+//            if let id = selectedRecipeId {
+//                RecipeQuickDetailView(recipeId: id, navigationPath: $navigationPath)
+//            }
+//        }
+        .sheet(item: $selectedRecipe, content: { recipe in
+            RecipeQuickDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
+        })
     }
 }
 
