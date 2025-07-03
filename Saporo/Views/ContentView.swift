@@ -9,6 +9,7 @@ import SwiftUI
 import UIKit
 
 struct ContentView: View {
+    @AppStorage("isOnboardingComplete") private var isOnboardingComplete: Bool = false
     
     @State private var selectedTab: Tabs = .home
     @State private var navigationPath = NavigationPath()
@@ -16,54 +17,61 @@ struct ContentView: View {
     @AppStorage("sidebarCustomizations") private var tabViewCustomization: TabViewCustomization = TabViewCustomization()
     
     var body: some View {
-        NavigationStack(path: $navigationPath) {
+        if isOnboardingComplete {
             
-            TabView(selection: $selectedTab) {
-                // MARK: PESQUISAR
-                Tab(Tabs.search.title, image: Tabs.search.icon, value: Tabs.search) {
-                    RecipeSearchView(navigationPath: $navigationPath)
-                }
-                .customizationID(Tabs.search.customizationID)
+            NavigationStack(path: $navigationPath) {
                 
-                // MARK: RECEITAS
-                Tab(Tabs.home.title, image: Tabs.home.icon, value: Tabs.home) {
-                    HomeView(navigationPath: $navigationPath)
+                TabView(selection: $selectedTab) {
+                    // MARK: PESQUISAR
+                    Tab(Tabs.search.title, image: Tabs.search.icon, value: Tabs.search) {
+                        RecipeSearchView(navigationPath: $navigationPath)
+                    }
+                    .customizationID(Tabs.search.customizationID)
+                    
+                    // MARK: RECEITAS
+                    Tab(Tabs.home.title, image: Tabs.home.icon, value: Tabs.home) {
+                        HomeView(navigationPath: $navigationPath)
+                    }
+                    
+                    // MARK: FAVORITOS
+                    Tab(Tabs.favorites.title, image: Tabs.favorites.icon, value: Tabs.favorites) {
+                        FavoritesView(navigationPath: $navigationPath)
+                    }
+                    .customizationID(Tabs.favorites.customizationID)
                 }
-                .customizationID(Tabs.home.customizationID)
-                
-                // MARK: FAVORITOS
-                Tab(Tabs.favorites.title, image: Tabs.favorites.icon, value: Tabs.favorites) {
-                    FavoritesView(navigationPath: $navigationPath)
+                .tabViewStyle(.sidebarAdaptable)
+                .tabViewCustomization($tabViewCustomization)
+                .tint(Color.labels)
+                .onReceive(NotificationCenter.default.publisher(for: .openHomeTab)) { _ in
+                    selectedTab = .home
                 }
-                .customizationID(Tabs.favorites.customizationID)
-                
-                //                // MARK: CONFIGURAÇÕES
-                //                Tab(Tabs.settings.title, image: Tabs.settings.icon, value: Tabs.settings) {
-                //                    SettingsView()
-                //                }
-                //                .customizationID(Tabs.settings.customizationID)
-            }
-            .tabViewStyle(.sidebarAdaptable)
-            .tabViewCustomization($tabViewCustomization)
-            .tint(Color.labels)
-            .onReceive(NotificationCenter.default.publisher(for: .openHomeTab)) { _ in
-                selectedTab = .home
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .openFavoritesTab)) { _ in
-                selectedTab = .favorites
-            }
-            .onReceive(NotificationCenter.default.publisher(for: .openSearchTab)) { _ in
-                selectedTab = .search
-            }
-            .navigationDestination(for: Destination.self) { destination in
-                switch destination {
-                case .verMais(recipes: let recipes):
-                    VerMaisView(text: "Comidas de São João", receitas: recipes)
+                .onReceive(NotificationCenter.default.publisher(for: .openFavoritesTab)) { _ in
+                    selectedTab = .favorites
+                }
+                .onReceive(NotificationCenter.default.publisher(for: .openSearchTab)) { _ in
+                    selectedTab = .search
+                }
+                .navigationDestination(for: Destination.self) { destination in
+                    switch destination {
+                    case .verMais(recipes: let recipes, text: let category):
+                        VerMaisView(navigationPath: $navigationPath, text: category, receitas: recipes)
+                    case .recipeList(cuisine: let cuisine):
+                        RecipeListView(cuisine: cuisine, navigationPath: $navigationPath)
+                    }
+                }
+                .navigationDestination(for: [RecipeInformation.AnalyzedInstruction].self) { instructions in
+                    RecipeInstructionsView(analyzedInstructions: instructions)
                 }
             }
-            .navigationDestination(for: [RecipeInformation.AnalyzedInstruction].self) { instructions in
-                RecipeInstructionsView(analyzedInstructions: instructions)
+            
+        } else {
+            TabView {
+                PageOneView()
+                PageTwoView()
+                PageThreeView()
             }
+            .tabViewStyle(.page)
+            .indexViewStyle(.page(backgroundDisplayMode: .always))
         }
     }
 }

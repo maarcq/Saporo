@@ -23,12 +23,8 @@ struct RecipeInstructionsView: View {
         .background {
             BackgroundGeral()
         }
-        .navigationTitle("Preparo")
+        .navigationTitle("Prepare")
         .navigationBarTitleDisplayMode(.inline)
-        // NOVO: Adicionado para o atalho de voltar passo
-        .onReceive(NotificationCenter.default.publisher(for: .PreviousStep)) { _ in
-            viewModel.goToPreviousStep()
-        }
     }
     
     // MARK: - Subviews
@@ -55,14 +51,18 @@ struct RecipeInstructionsView: View {
                 }
                 Spacer()
             }
+            .onReceive(NotificationCenter.default.publisher(for: .PreviousStep)) { _ in
+                viewModel.goToPreviousStep()
+            }
             .onReceive(NotificationCenter.default.publisher(for: .NextStep)) { _ in
                 //logica para falar com a siri para mover para o proximo passo
                 viewModel.goToNextStep()
             }
             .padding()
             .frame(maxWidth: 100, maxHeight: .infinity)
-            .scrollIndicators(.hidden)
+            
         }
+        .scrollIndicators(.hidden)
     }
     
     private func stepCircle(index: Int) -> some View {
@@ -119,7 +119,6 @@ struct RecipeInstructionsView: View {
                                         .scaleEffect(x: phase.isIdentity ? 1.0 : 0.0,
                                                      y: phase.isIdentity ? 1.0 : 0.0)
                                 }
-                                .border(.black)
                         }
                     }
                     .scrollTargetLayout()
@@ -155,11 +154,20 @@ struct RecipeInstructionsView: View {
                 .frame(maxWidth: .infinity)
                 .padding(.horizontal)
             //funcao para alinhas a imagem correta pro passo correto
-            if let image = viewModel.getImageName(for: step.step) {
-                Image(image)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 300,height: 300)
+            HStack(spacing: 30) {
+                if let image = viewModel.getImageAction(for: step.step) {
+                    Image(image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200,height: 200)
+                }
+                if let image = viewModel.getImageInstruments(for: step.step) {
+                    Image(image)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200,height: 200)
+                }
+                
             }
         }
     }

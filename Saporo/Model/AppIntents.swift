@@ -5,7 +5,6 @@
 //  Created by Natanael nogueira on 11/06/25.
 //
 
-
 import AppIntents
 
 extension Notification.Name {
@@ -39,13 +38,13 @@ struct MyAppShortcuts: AppShortcutsProvider {
         )
         AppShortcut(
             intent: NextStep(),
-            phrases: ["próximo passo \(.applicationName)"],
+            phrases: ["próximo passo \(.applicationName)", "next step \(.applicationName)"],
             shortTitle: "Próximo passo",
             systemImageName: "hand.tap"
         )
         AppShortcut( // Atalho para voltar um passo
             intent: PreviousStep(),
-            phrases: ["voltar passo \(.applicationName)", "passo anterior \(.applicationName)"],
+            phrases: ["voltar passo \(.applicationName)", "passo anterior \(.applicationName)", "previous step \(.applicationName)"],
             shortTitle: "Voltar passo",
             systemImageName: "arrow.uturn.backward"
         )

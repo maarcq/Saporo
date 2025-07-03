@@ -14,16 +14,17 @@ struct ListSaoJoao: View {
     @State private var selectedRecipe: Recipe?
     
     var HViewmodel: HomeViewModel
-    
+    let category = "Movie Night"
+
     var body: some View {
         
         VStack(alignment: .leading) {
             Button {
-                navigationPath.append(Destination.verMais(recipes: HViewmodel.saoJoao.results))
+                navigationPath.append(Destination.verMais(recipes: HViewmodel.saoJoao.results, text: category))
             } label: {
                 HStack{
-                    Text("Comidas de São João")
-                        .font(.poppinsMedium(size: 24))
+                    Text(category)
+                        .font(.poppinsRegular(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
                         .font(Font.poppinsBold(size: 30))
@@ -33,7 +34,7 @@ struct ListSaoJoao: View {
             
             ScrollView(.horizontal,showsIndicators: false) {
                 HStack {
-                    ForEach(HViewmodel.saoJoao.results.prefix(5), id: \.id) { recipe in
+                    ForEach(HViewmodel.saoJoao.results.prefix(10), id: \.id) { recipe in
                         Button {
                             self.selectedRecipe = recipe
                             self.showingSheet = true
@@ -46,11 +47,14 @@ struct ListSaoJoao: View {
                 }
             }
         }
-        .sheet(isPresented: $showingSheet) {
-            if let selectedRecipe = selectedRecipe {
-                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath) // MODIFICADO AQUI
-            }
-        }
+        .sheet(item: $selectedRecipe, content: { recipe in
+            RecipeQuickDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
+        })
+//        .sheet(isPresented: $showingSheet) {
+//            if let selectedRecipe = selectedRecipe {
+//                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath)
+//            }
+//        }
     }
 }
 

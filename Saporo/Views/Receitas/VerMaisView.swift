@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct VerMaisView: View {
+    @State private var showingSheet: Bool = false
+    @State private var selectedRecipe: Recipe?
+    @Binding var navigationPath: NavigationPath
     
     var text: String
     var receitas: [Recipe]
@@ -18,8 +21,9 @@ struct VerMaisView: View {
             LazyVGrid(columns: columns, spacing: 0) {
                 ForEach(receitas) { receita in
                     VStack {
-                        Button {
-                            print("clicou no card id:\(receita.id)")
+                        Button{
+                            self.selectedRecipe = receita
+                            self.showingSheet = true
                         } label: {
                             HomeItensView(image: receita.image ?? "", nameRecipe: receita.title, maxReadyTime: receita.readyInMinutes ?? 0)
                                 .scaleEffect(0.9)
@@ -30,12 +34,19 @@ struct VerMaisView: View {
             .padding()
         }
         .navigationTitle(text)
-        .background(BackgroundGeral())
+        .background(
+            BackgroundGeral()
+        )
+        .sheet(isPresented: $showingSheet) {
+            if let selectedRecipe = selectedRecipe {
+                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath)
+            }
+        }
     }
 }
 
 #Preview {
-    VerMaisView(text: "", receitas: [
+    VerMaisView(navigationPath: .constant(NavigationPath()), text: "", receitas: [
         Recipe(id: 1, title: "Bolo de Cenoura", image: "ImageTest", imageType: nil, readyInMinutes: 45, servings: 8, cuisine: "italian"),
         Recipe(id: 2, title: "Pizza Margherita", image: "ImageTest", imageType: nil, readyInMinutes: 20, servings: 2, cuisine: "italian"),
         Recipe(id: 23, title: "Pizza Margherita1", image: "ImageTest", imageType: nil, readyInMinutes: 20, servings: 2, cuisine: "italian"),

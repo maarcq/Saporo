@@ -14,16 +14,17 @@ struct ListSobremesas: View {
     @State private var selectedRecipe: Recipe?
     
     var HViewmodel: HomeViewModel
-    
+    let category: String = "Desserts"
+
     var body: some View {
         
         VStack(alignment: .leading) {
             Button {
-                navigationPath.append(Destination.verMais(recipes: HViewmodel.sobremesas.results))
+                navigationPath.append(Destination.verMais(recipes: HViewmodel.sobremesas.results, text: category))
             } label: {
                 HStack{
-                    Text("Sobremesas")
-                        .font(.poppinsMedium(size: 24))
+                    Text("Desserts")
+                        .font(.poppinsRegular(size: 24))
                         .foregroundStyle(Color("LabelsColor"))
                     Text(">")
                         .font(Font.poppinsBold(size: 30))
@@ -33,7 +34,7 @@ struct ListSobremesas: View {
             
             ScrollView(.horizontal,showsIndicators: false) {
                 HStack {
-                    ForEach(HViewmodel.sobremesas.results.prefix(5), id: \.id) { recipe in
+                    ForEach(HViewmodel.sobremesas.results.prefix(10), id: \.id) { recipe in
                         Button {
                             self.selectedRecipe = recipe
                             self.showingSheet = true

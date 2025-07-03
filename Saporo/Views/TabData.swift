@@ -6,18 +6,19 @@
 //
 
 import Foundation
+import SwiftUICore
 
 enum Tabs: String, CaseIterable, Identifiable {
     case home, favorites, search, settings
     
     var id: String { rawValue }
     
-    var title: String {
+    var title: LocalizedStringKey {
         switch self {
-        case .home: return "Receitas"
-        case .favorites: return "Favoritos"
-        case .search: return "Pesquisar"
-        case .settings: return "Configurações"
+        case .home: return "Recipes"
+        case .favorites: return "Favorites"
+        case .search: return "Search"
+        case .settings: return "Settings"
         }
     }
     
