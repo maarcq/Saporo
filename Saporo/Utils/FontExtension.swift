@@ -9,7 +9,23 @@ import Foundation
 import SwiftUI
 
 extension Font {
-    
+    // MARK: - Fonte Logo
+    static func foodPacker(size: CGFloat) -> Font {
+        let cfURL = Bundle.main.url(
+            forResource: "Foodpacker", // Nome do ARQUIVO
+            withExtension: "otf"
+        )! as CFURL
+        
+        if let uiFont = UIFont(name: "Foodpacker", size:  size) {
+            return Font(uiFont)
+        }
+        
+        CTFontManagerRegisterFontsForURL(cfURL, CTFontManagerScope.process, nil)
+        
+        let uiFont = UIFont(name: "Foodpacker", size:  size) // Nome da FONTE
+        
+        return Font(uiFont ?? UIFont())
+    }
     // MARK: - Fonte Regular
     static func poppinsRegular(size: CGFloat) -> Font {
         let cfURL = Bundle.main.url(
@@ -27,7 +43,6 @@ extension Font {
         
         return Font(uiFont ?? UIFont())
     }
-    
     // MARK: - Fonte Média
     static func poppinsMedium(size: CGFloat) -> Font {
         let cfURL = Bundle.main.url(
@@ -45,7 +60,6 @@ extension Font {
         
         return Font(uiFont ?? UIFont())
     }
-    
     // MARK: - Fonte Bold
     static func poppinsBold(size: CGFloat) -> Font {
         let cfURL = Bundle.main.url(
