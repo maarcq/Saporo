@@ -25,10 +25,6 @@ struct RecipeInstructionsView: View {
         }
         .navigationTitle("Preparo")
         .navigationBarTitleDisplayMode(.inline)
-        // NOVO: Adicionado para o atalho de voltar passo
-        .onReceive(NotificationCenter.default.publisher(for: .PreviousStep)) { _ in
-            viewModel.goToPreviousStep()
-        }
     }
     
     // MARK: - Subviews
@@ -54,6 +50,9 @@ struct RecipeInstructionsView: View {
                         }
                 }
                 Spacer()
+            }
+            .onReceive(NotificationCenter.default.publisher(for: .PreviousStep)) { _ in
+                viewModel.goToPreviousStep()
             }
             .onReceive(NotificationCenter.default.publisher(for: .NextStep)) { _ in
                 //logica para falar com a siri para mover para o proximo passo
