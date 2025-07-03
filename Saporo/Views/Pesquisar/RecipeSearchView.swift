@@ -108,11 +108,9 @@ struct RecipeSearchView: View {
         .background {
             BackgroundGeral()
         }
-        .sheet(isPresented: $showingSheet) {
-            if let selectedrecipe = selectedRecipe {
-                RecipeQuickDetailView(recipeId: selectedrecipe.id, navigationPath: $navigationPath)
-            }
-        }
+        .sheet(item: $selectedRecipe, content: { recipe in
+            RecipeQuickDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
+        })
         .onReceive(NotificationCenter.default.publisher(for: .SearchByVoice)) { _ in
             isSearchFieldFocused = true
         }
@@ -164,11 +162,9 @@ struct RecipeListView: View {
                     }
                     .scrollContentBackground(.hidden)
                 }
-                .sheet(isPresented: $showingSheet) {
-                    if let selectedrecipe = selectedRecipe {
-                        RecipeQuickDetailView(recipeId: selectedrecipe.id, navigationPath: $navigationPath)
-                    }
-                }
+                .sheet(item: $selectedRecipe, content: { recipe in
+                    RecipeQuickDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
+                })
             }
         }
         .background {

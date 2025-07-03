@@ -37,11 +37,9 @@ struct VerMaisView: View {
         .background(
             BackgroundGeral()
         )
-        .sheet(isPresented: $showingSheet) {
-            if let selectedRecipe = selectedRecipe {
-                RecipeQuickDetailView(recipeId: selectedRecipe.id, navigationPath: $navigationPath)
-            }
-        }
+        .sheet(item: $selectedRecipe, content: { recipe in
+            RecipeQuickDetailView(recipeId: recipe.id, navigationPath: $navigationPath)
+        })
     }
 }
 
